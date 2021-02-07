@@ -1,0 +1,217 @@
+@font-face {
+    font-family: 'beauty';
+    src: url('../font/beautymountainspersonaluse-od7z-webfont.woff2') format('woff2'),
+         url('../font/beautymountainspersonaluse-od7z-webfont.woff') format('woff');
+    font-style: normal;
+    
+
+}
+.all_project{
+    width: 100%;
+    height: 100%;
+    background-color:#f7f7f7 ;
+    background-size: cover;
+}
+
+header{
+    width: 100%;
+    height: 100px;
+    background-color:#f7f7f7 ;
+    background-size: cover;
+    position: fixed;
+    z-index:100;
+}
+
+
+
+.logo{
+
+    font-family: 'beauty';
+    font-size: 72px;
+    
+
+}
+
+.logo a:visited,.logo a:link,.logo a:after,.logo a:hover{
+    text-decoration: none;
+    color: #00cc66;
+    font-weight: 500;
+}
+
+.background{
+    margin-top: 100px;
+    width: 600px;
+    height:600px;
+    background-size: cover;
+    background-image: url(../img/imgpng.png);
+    position: relative;
+    animation-name: example;
+    animation-duration: 4s;
+    animation-delay:0s;
+    animation-iteration-count: 1000;
+}
+  
+ @keyframes example {
+    0%   { left:0px; top:0px;}
+    75%  { left:0px; top:70px;}
+    100% { left:0px; top:0px;}
+  
+}
+
+.text{
+    margin-top: 210px;
+    font-family: 'Kumbh Sans', sans-serif;
+
+}
+
+.p1 {
+    font-size: 64px;
+    color: #00cc66;}
+
+.p2 {
+    font-size:64px;
+    color: #222121;}
+
+.p3 {
+    font-size: 32px;
+    color: #222121;
+    margin-top: 16px;
+    font-weight: 700;}
+
+.menu{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.menu_item{
+    text-decoration: none;
+    color:  #222121;
+    margin-left: 30px;
+    font-weight:700 ;
+}
+
+.menu_item:hover{
+    color: #00cc66;
+}
+
+.btn_1{
+    width: 100px;
+    height: 45px;
+    padding-top: 8px;
+    background-color:#f7f7f7;
+    border: 2px solid #00cc66;
+    color:#00cc66;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: -10px;
+    transition: all 0.3s;
+    position: relative;
+    z-index: 2;
+    text-decoration: none;
+    border-radius: 25px;
+}
+
+.btn_1:hover{
+    background-color: #00cc66;
+    color: #f7f7f7;
+}
+
+.main_text {
+    width: 100%;
+    height: 150px;
+    font-size: 60px;
+    text-align: center;
+}
+
+.a{
+    width: 100%;
+    height: 100px;
+}
+.service {
+    width:265px;
+    height: 300px;
+    border: 4px solid #00cc66;
+    margin: 0 auto;
+    margin-bottom: 150px;
+}
+
+
+
+.service_text{
+    color: #222121;
+    text-align: center;
+    overflow: hidden;
+}
+
+.service_info{
+    text-align: center;
+}
+.service_icon{
+    font-size:80px;
+    color:#00cc66;
+    padding-top: 15px;
+}
+.service_text h5{
+    padding-top: 12px;
+    padding-bottom: 16px;
+}
+
+.service_text p{
+    font-size:14px;
+    padding-left:10px;
+    padding-right: 5px;
+}
+
+.reg_text{
+    margin-top: 20px;
+}
+
+.register_and_login{
+        width:265px;
+        height: 160px;
+        border: 4px solid #00cc66;
+        margin: 0 auto;
+        margin-bottom: 150px;
+        text-align: center;
+    
+}
+
+.register_and_login:hover i{
+    transition: all 0.3s;
+    border: 4px solid #00cc66;
+    background-color: #00cc66;
+    color: #f7f7f7;
+}
+
+.register_and_login:hover {
+    transition: all 0.3s;
+    border: 4px solid #00cc66;
+    background-color: #00cc66;
+    color: #f7f7f7;
+}
+
+.registration a{
+    text-decoration: none;
+    color: #222121;
+
+}
+.register_and_login_icon{
+    font-size:80px;
+    color:#00cc66;
+    padding-top: 15px;
+}
+
+main a:hover{
+    color: #222121;
+}
+
+.footer{
+    width: 100%;
+    height: 30px;
+    background-color: #222121;
+    color: #f7f7f7;
+    text-align: center;
+}
