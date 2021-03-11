@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New User Registration</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+
+            <!-- success message -->
+            <div th:if="${param.success}">
+                <div class="alert alert-info">ՈՒսանողի տվյալները ավելացվել են տվյալների բազայում</div>
+            </div>
+            <div th:if="${param.error}">
+                <div class="alert alert-danger">Նշված էլ․ փոստի հասցեն արդեն գրանցված է</div>
+            </div>
+            <h1>Նոր ուսանողի գրանցում</h1>
+
+            <form th:action="@{user}" method="post" th:object="${user}">
+                <div class="form-group">
+                    <label class="control-label" for="firstName"> Անուն </label>
+                    <input id="firstName" class="form-control" th:field="*{firstName}"
+                           required autofocus="autofocus" />
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="lastName"> Ազգանուն </label> <input
+                        id="lastName" class="form-control" th:field="*{lastName}"
+                        required autofocus="autofocus" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="lastName"> Հայրանուն </label> <input
+                        id="middleName" class="form-control" th:field="*{middleName}"
+                        required autofocus="autofocus" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="email"> Էլեկտրոնային փոստ </label> <input
+                        id="email" class="form-control" th:field="*{email}" required autofocus="autofocus" />
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Գրանցել</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
