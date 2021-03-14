@@ -131,8 +131,10 @@ header{
     height: 100px;
 }
 .service {
-    width:265px;
-    height: 300px;
+    border-radius: 10px;
+    box-shadow: 3px 3px #73c439;
+    width:285px;
+    height: 320px;
     border: 4px solid #00cc66;
     margin: 0 auto;
     margin-bottom: 150px;
