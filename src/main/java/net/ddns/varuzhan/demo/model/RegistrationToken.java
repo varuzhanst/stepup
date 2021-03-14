@@ -9,7 +9,7 @@ public class RegistrationToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @OneToOne
-    private UserData userData;
+    private User user;
     private String token;
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;
@@ -19,8 +19,8 @@ public class RegistrationToken {
     public RegistrationToken() {
     }
 
-    public RegistrationToken(UserData userData, String token, LocalDateTime createdAt, LocalDateTime expiresAt, LocalDateTime usedAt) {
-        this.userData = userData;
+    public RegistrationToken(User user, String token, LocalDateTime createdAt, LocalDateTime expiresAt, LocalDateTime usedAt) {
+        this.user = user;
         this.token = token;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
@@ -59,12 +59,12 @@ public class RegistrationToken {
         this.id = id;
     }
 
-    public UserData getUserData() {
-        return userData;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserData(UserData userData) {
-        this.userData = userData;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getToken() {

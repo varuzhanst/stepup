@@ -1,12 +1,23 @@
 package net.ddns.varuzhan.demo.dto;
 
-public class UserManagerRegistrationDto {
+public class UserRegistrationDto {
     private String firstName;
     private String lastName;
     private String middleName;
     private String email;
     private String password;
+    private String token;
     private String role;
+    public UserRegistrationDto() {
+    }
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
 
     public String getToken() {
         return token;
@@ -16,14 +27,18 @@ public class UserManagerRegistrationDto {
         this.token = token;
     }
 
-    private String token;
 
-    public String getRole() {
-        return role;
+
+
+
+
+
+    public String getPassword() {
+        return password;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstName() {
@@ -48,17 +63,6 @@ public class UserManagerRegistrationDto {
 
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UserManagerRegistrationDto() {
     }
 
     public String getEmail() {

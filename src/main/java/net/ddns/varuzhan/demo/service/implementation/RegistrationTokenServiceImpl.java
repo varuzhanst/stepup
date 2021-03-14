@@ -1,7 +1,7 @@
 package net.ddns.varuzhan.demo.service.implementation;
 
 import net.ddns.varuzhan.demo.model.RegistrationToken;
-import net.ddns.varuzhan.demo.model.UserData;
+import net.ddns.varuzhan.demo.model.User;
 import net.ddns.varuzhan.demo.repository.RegistrationTokenRepository;
 import net.ddns.varuzhan.demo.service.prototype.RegistrationTokenService;
 import org.springframework.stereotype.Component;
@@ -20,13 +20,7 @@ public class RegistrationTokenServiceImpl implements RegistrationTokenService {
 
     @Override
     public RegistrationToken findTokenByTokenUUID(String tokenUUID) {
-        List<RegistrationToken> tokens = registrationTokenRepository.findAll();
-        for (RegistrationToken token : tokens) {
-            if (token.getToken().equals(tokenUUID)) {
-                return registrationTokenRepository.findById(token.getId()).get();
-            }
-        }
-        return null;
+        return registrationTokenRepository.findRegistrationTokenByToken(tokenUUID).orElse(null);
     }
 
     @Override
@@ -35,10 +29,10 @@ public class RegistrationTokenServiceImpl implements RegistrationTokenService {
     }
 
     @Override
-    public Boolean isValidTokenAvailable(UserData userData) {
+    public Boolean isValidTokenAvailable(User user) {
         List<RegistrationToken> validToken = registrationTokenRepository.findAll()
                 .stream()
-                .filter(token -> LocalDateTime.now().isBefore(token.getExpiresAt()) && token.getUsedAt() == null && userData.equals(token.getUserData()))
+                .filter(token -> LocalDateTime.now().isBefore(token.getExpiresAt()) && token.getUsedAt() == null && user.equals(token.getUser()))
                 .collect(Collectors.toList());
         return !validToken.isEmpty();
     }

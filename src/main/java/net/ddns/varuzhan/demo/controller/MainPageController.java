@@ -10,6 +10,9 @@ public class MainPageController {
     public String loadMainPage(){
         return "index";
     }
-
+    @RequestMapping("/403")
+    public String errorAccessDenied(){
+        return "403";
+    }
 
 }
