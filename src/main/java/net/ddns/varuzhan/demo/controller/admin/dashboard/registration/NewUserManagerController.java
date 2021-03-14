@@ -2,8 +2,9 @@ package net.ddns.varuzhan.demo.controller.admin.dashboard.registration;
 
 
 import net.ddns.varuzhan.demo.dto.AdminRegisteredPersonDto;
-import net.ddns.varuzhan.demo.model.AdminRegisteredPerson;
-import net.ddns.varuzhan.demo.service.AdminRegisteredPersonService;
+import net.ddns.varuzhan.demo.model.UserData;
+import net.ddns.varuzhan.demo.model.Role;
+import net.ddns.varuzhan.demo.service.implementation.UserDataServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/admin/dashboard/registration")
 public class NewUserManagerController {
-    private final AdminRegisteredPersonService adminRegisteredPersonService;
+    private final UserDataServiceImpl userDataServiceImpl;
 
-    public NewUserManagerController(AdminRegisteredPersonService adminRegisteredPersonService) {
-        this.adminRegisteredPersonService = adminRegisteredPersonService;
+    public NewUserManagerController(UserDataServiceImpl userDataServiceImpl) {
+        this.userDataServiceImpl = userDataServiceImpl;
     }
 
 
@@ -34,15 +35,15 @@ public class NewUserManagerController {
 
     @PostMapping("/user")
     public String newUserRegistrationProcessing(@ModelAttribute("user") AdminRegisteredPersonDto adminRegisteredPersonDto) {
-        if (adminRegisteredPersonService.isUserFoundByEmail(adminRegisteredPersonDto.getEmail())) {
-            return "redirect:/admin/dashboard/users/new?error";
+        if (userDataServiceImpl.findUserDataByEmail(adminRegisteredPersonDto.getEmail())!=null) {
+            return "redirect:/admin/dashboard/registration/user?error";
         } else {
-            adminRegisteredPersonService.save(new AdminRegisteredPerson(
+            userDataServiceImpl.save(new UserData(
                     adminRegisteredPersonDto.getFirstName(),
                     adminRegisteredPersonDto.getLastName(),
                     adminRegisteredPersonDto.getMiddleName(),
                     adminRegisteredPersonDto.getEmail(),
-                    "STUDENT",
+                    Role.USER,
                     false
             ));
             return "redirect:/admin/dashboard/registration/user?success";
@@ -51,15 +52,15 @@ public class NewUserManagerController {
 
     @PostMapping("/manager")
     public String newManagerRegistrationProcessing(@ModelAttribute("user") AdminRegisteredPersonDto adminRegisteredPersonDto) {
-        if (adminRegisteredPersonService.isUserFoundByEmail(adminRegisteredPersonDto.getEmail())) {
+        if (userDataServiceImpl.findUserDataByEmail(adminRegisteredPersonDto.getEmail())!=null) {
             return "redirect:/admin/dashboard/registration/manager?error";
         } else {
-            adminRegisteredPersonService.save(new AdminRegisteredPerson(
+            userDataServiceImpl.save(new UserData(
                     adminRegisteredPersonDto.getFirstName(),
                     adminRegisteredPersonDto.getLastName(),
                     adminRegisteredPersonDto.getMiddleName(),
                     adminRegisteredPersonDto.getEmail(),
-                    "MANAGER",
+                    Role.MANAGER,
                     false
             ));
             return "redirect:/admin/dashboard/registration/manager?success";

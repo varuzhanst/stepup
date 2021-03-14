@@ -2,32 +2,32 @@ package net.ddns.varuzhan.demo.model;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
-@Table(name = "admin_registered_user_manager")
-public class AdminRegisteredPerson {
+public class UserData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "first_name")
+    @Column
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column
     private String lastName;
 
-    @Column(name = "middle_name")
+    @Column
     private String middleName;
 
     private String email;
-    private String role;
+    private Role role;
     private Boolean isRegistered=false;
 
-    public AdminRegisteredPerson() {
+    public UserData() {
     }
 
-    public AdminRegisteredPerson(String firstName, String lastName, String middleName, String email, String role, Boolean isRegistered) {
+    public UserData(String firstName, String lastName, String middleName, String email, Role role, Boolean isRegistered) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
@@ -76,19 +76,32 @@ public class AdminRegisteredPerson {
         this.email = email;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
-    public Boolean getRegistered() {
+    public Boolean isRegistered() {
         return isRegistered;
     }
 
     public void setRegistered(Boolean registered) {
         isRegistered = registered;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserData that = (UserData) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

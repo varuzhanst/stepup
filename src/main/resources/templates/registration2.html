@@ -14,36 +14,43 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
 
-            <!-- success message -->
-            <div th:if="${param.success}">
-                <div class="alert alert-success">ՈՒսանողի տվյալները ավելացվել են տվյալների բազայում</div>
-            </div>
-            <div th:if="${param.error}">
-                <div class="alert alert-danger">Նշված էլ․ փոստի հասցեն արդեն գրանցված է</div>
-            </div>
-            <h1>Նոր ուսանողի գրանցում</h1>
+            <h1>Նոր օգտատիրոջ գրանցում</h1>
 
-            <form th:action="@{user}" method="post" th:object="${user}">
+            <form th:action="@{registration}" method="post" th:object="${userInfo}">
+                <input type="hidden" id="token" class="form-control" th:field="*{token}" autofocus="autofocus" />
+
                 <div class="form-group">
                     <label class="control-label" for="firstName"> Անուն </label>
                     <input id="firstName" class="form-control" th:field="*{firstName}"
-                           required autofocus="autofocus" />
+                           autofocus="autofocus" disabled/>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label" for="lastName"> Ազգանուն </label> <input
-                        id="lastName" class="form-control" th:field="*{lastName}"
-                        required autofocus="autofocus" />
+                        id="lastName" class="form-control" th:field="*{lastName}" disabled
+                        autofocus="autofocus" />
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="lastName"> Հայրանուն </label> <input
-                        id="middleName" class="form-control" th:field="*{middleName}"
-                        required autofocus="autofocus" />
+                        id="middleName" class="form-control" th:field="*{middleName} " disabled
+                        autofocus="autofocus" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="lastName"> Գրանցում որպես </label> <input
+                        id="role" class="form-control" th:field="*{role} " disabled
+                        autofocus="autofocus" />
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="email"> Էլեկտրոնային փոստ </label> <input
-                        id="email" class="form-control" th:field="*{email}" required autofocus="autofocus" />
+                        id="email" class="form-control" th:field="*{email}" autofocus="autofocus" disabled />
                 </div>
+                <div class="form-group">
+                    <label class="control-label" for="password"> Գաղտնաբառ </label> <input
+                       type="password" id="password" class="form-control" th:field="*{password}" required autofocus="autofocus" />
+                </div>
+
+
+
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">Գրանցել</button>

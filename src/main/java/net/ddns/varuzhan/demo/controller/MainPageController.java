@@ -10,4 +10,6 @@ public class MainPageController {
     public String loadMainPage(){
         return "index";
     }
+
+
 }
