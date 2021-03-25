@@ -1,5 +1,6 @@
 package net.ddns.varuzhan.demo.service.implementation;
 
+import net.ddns.varuzhan.demo.model.Role;
 import net.ddns.varuzhan.demo.model.User;
 import net.ddns.varuzhan.demo.repository.UserRepository;
 import net.ddns.varuzhan.demo.service.prototype.UserService;
@@ -8,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
+import java.util.TreeSet;
 
 @Component
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -25,6 +29,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public Set<User> getAllManagers() {
+       return new TreeSet<>(userRepository.findAllByRole(Role.MANAGER));
+    }
+
+    @Override
+    public Set<User> getAllUsers() {
+        return new TreeSet<>(userRepository.findAllByRole(Role.USER)) ;
     }
 
 

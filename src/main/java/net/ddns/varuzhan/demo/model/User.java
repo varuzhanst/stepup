@@ -13,7 +13,7 @@ import java.util.Objects;
 
 
 @Entity
-public class User implements UserDetails {
+public class User implements UserDetails,Comparable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -160,5 +160,12 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+
+    @Override
+    public int compareTo(Object o) {
+        User user = (User) o;
+        return this.id-user.getId();
     }
 }

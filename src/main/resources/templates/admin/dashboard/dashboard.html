@@ -1,16 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
+    <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet" />
 </head>
 <body>
-<div><a href = "/admin/dashboard/registration/user"> Նոր ուսանողի գրանցում </a></div>
-<br>
-<div><a href = "/admin/dashboard/registration/manager"> Նոր ուսանողի գրանցում </a></div>
-<br>
-<div><a href = "/admin/dashboard/view/user"> Ուսանողների կառավարում </a></div>
-<br>
-<div><a href = "/admin/dashboard/view/manager"> Դասախոսների կառավարում </a></div>
+<table id="usersTable" class="w3-table-all" >
+    <script src="https://www.w3schools.com/lib/w3.js"></script>
+    <tr>
+        <th>Դասախոս</th>
+        <th>Խումբ</th>
+        <th>Առարկա</th>
+        <th>Հեռացնել</th>
+    </tr>
+    <tr th:each="data :${managers_groups_subjects}">
+        <td>
+            <span th:text="${data.getUser().firstName}"></span>
+            <span th:text="${data.getUser().lastName}"></span>
+        </td>
+        <td>
+            <span th:text="${data.getGroupInfo().getGroupNumber()}"></span>
+        </td>
+        <td>
+            <span th:text="${data.getSubjectInfo().getSubjectName()}"></span>
+        </td>
+        <td>
+            <span>Հեռացնել</span>
+        </td>
+    </tr>
+</table>
 </body>
 </html>

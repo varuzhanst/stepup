@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,6 +11,12 @@
   </head>
   <body>
      <div class="container">
+       <div th:if="${param.noGroup}">
+         <div class="alert alert-info">Ձեր հաշիվը կցված չէ ակադեմիական որևէ խմբի։ Խնդրում ենք դիմել Ձեր համալսարանի ադմինիստրատորին։</div>
+       </div>
+       <div th:if="${param.error}">
+         <div class="alert alert-danger">Էլ․ փոստը կամ գաղտնաբառը սխալ է։ Խնդրում ենք ստուգել։</div>
+       </div>
       <form class="form-signin" method="post" action="/login">
         <h2 class="form-signin-heading">Մուտք գործել համակարգ</h2>
         <p>
