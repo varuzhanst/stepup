@@ -13,7 +13,7 @@ import java.util.Objects;
 
 
 @Entity
-public class User implements UserDetails,Comparable {
+public class User implements UserDetails, Comparable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -42,7 +42,6 @@ public class User implements UserDetails,Comparable {
         this.enabled = enabled;
         this.role = role;
     }
-
 
 
     @Override
@@ -166,6 +165,14 @@ public class User implements UserDetails,Comparable {
     @Override
     public int compareTo(Object o) {
         User user = (User) o;
-        return this.id-user.getId();
+        return this.id - user.getId();
+    }
+    //-1 locked
+    //0 non enabled
+    //1 enabled
+    public int userStatus() {
+        if (this.locked) return -1;
+        else if (!this.isEnabled()) return 0;
+        else return 1;
     }
 }

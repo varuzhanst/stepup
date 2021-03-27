@@ -39,17 +39,17 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="section_1">
-                            <div class="func_btn button-1"><p>Խմբերի և առարկաներ</p></div>
+                            <div class="func_btn button-1"><p>Հանձնարարություններ <span class="count">0</span></p></div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="section_2">
-                            <div class="func_btn button-2"><p>Դասախոսների և ուսանողներ</p></div>
+                            <div class="func_btn button-2"><p>Ուսումնական նյութեր <span class="count">0</span></p></div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="section_2">
-                            <div class="func_btn button-3"><p>Կառավարում</p></div>
+                        <div class="section_3">
+                            <div class="func_btn button-3"><p>Քննություններ <span class="count">0</span></p></div>
                         </div>
                     </div>
                 </div>
@@ -58,43 +58,24 @@
 
                 </div>
                 <div class="section_1_text" id="b">
-                    <br>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Անուն</th>
-                            <th scope="col">Ազգանուն</th>
-                            <th scope="col">Հայրանուն</th>
-                            <th scope="col">Էլ․ փոստ</th>
-                            <th scope="col">Հաշվի կարգավիճակ</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="manager: ${managers}">
-                            <th scope="row" th:text="${manager.id}"></th>
-                            <td >
-                                <span th:text="${manager.firstName}"></span>
-                            </td>
-                            <td>
-                                <span th:text="${manager.lastName}"></span>
-                            </td>
-                            <td>
-                                <span th:text="${manager.middleName}"></span>
-                            </td>
-                            <td>
-                                <span th:text="${manager.email}"></span>
-                            </td>
-                            <td>
-                                <span th:if="${manager.userStatus()==1}" style="color:OliveDrab;">Ակտիվ</span>
-                                <span th:if="${manager.userStatus()==0}" style="color:OrangeRed;">Նախնական</span>
-                                <span th:if="${manager.userStatus()==-1}" style="color:DarkRed;">Արգելափակված</span>
-                            </td>
-
-
-                        </tr>
-                        </tbody>
-                    </table>
+                    <form th:action="@{/manager/dashboard}"
+                          method="post"
+                          enctype="multipart/form-data"
+                    >
+                        <div>
+                            <select>
+                                <option th:each="group: ${groups}" th:value="${group.id}" th:text="${group.groupName}">
+                                </option>
+                            </select>
+                            <select>
+                                <option th:each="subject: ${subjects}" th:value="${subject.id}" th:text="${subject.subjectName}">
+                                </option>
+                            </select>
+                            <label>File: </label>
+                            <input type="file" name="material"/>
+                        </div>
+                        <button type="submit">Ավելացնել</button>
+                    </form>
                 </div>
                 <div class="section_1_text" id="c">
 

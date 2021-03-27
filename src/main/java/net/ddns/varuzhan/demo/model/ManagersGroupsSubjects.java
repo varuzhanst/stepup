@@ -54,4 +54,5 @@ public class ManagersGroupsSubjects {
     public void setSubjectInfo(SubjectInfo subjectInfo) {
         this.subjectInfo = subjectInfo;
     }
+
 }
