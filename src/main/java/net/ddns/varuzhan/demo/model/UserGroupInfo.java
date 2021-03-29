@@ -1,6 +1,7 @@
 package net.ddns.varuzhan.demo.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class UserGroupInfo {
@@ -42,5 +43,18 @@ public class UserGroupInfo {
 
     public void setGroupInfo(GroupInfo groupInfo) {
         this.groupInfo = groupInfo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserGroupInfo that = (UserGroupInfo) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

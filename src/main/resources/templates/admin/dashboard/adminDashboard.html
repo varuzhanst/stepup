@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <title>StepUp</title>
     <link rel="stylesheet" href="../static/css/styles_main.css">
     <link rel="stylesheet" href="../static/library/bootstrap.min.css">
@@ -17,7 +18,7 @@
                 <div class="row">
                     <div class="col-md-2">
                         <div class="logo">
-                            <a href="#">StepUp</a>
+                            <a href="/admin/dashboard">StepUp</a>
                         </div>
                     </div>
                     <div class="col-md-6 offset-md-4">
@@ -34,6 +35,9 @@
 
 
     <main>
+        <!-- success message -->
+
+
         <div class="container">
             <div class="main_section">
                 <div class="row">
@@ -55,14 +59,61 @@
                 </div>
 
                 <div class="section_1_text" id="a">
+                    <br>
+                    <div th:if="${param.groupAlreadyExists}">
+                        <div class="alert alert-danger">Խումբը արդեն գոյություն ունի</div>
+                    </div>
+                    <div th:if="${param.groupAdditionSuccess}">
+                        <div class="alert alert-info">Խումբը հաջողությամբ ավելացվել է</div>
+                    </div>
+                    <br>
+                    <br>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Խումբ</th>
+                            <th scope="col">Ուսանողների քանակ</th>
+                            <th scope="col">Դասախոսների քանակ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="group:${groups}">
+                            <th>
+                                <span th:text="${group.getGroupInfo().groupNumber}"></span>
 
+                            </th>
+                            <td>
+                                <span th:text="${group.getUsersCount()}"></span>
+                                <a th:href="@{'/admin/dashboard/groups/'+${group.getGroupInfo().getId()}+'/users'}" >
+                                    <i class='fas fa-pen'></i>
+                                </a>
+                            </td>
+                            <td><span th:text="${group.getManagersCount()}"></span>
+                                <a th:href="@{'/admin/dashboard/groups/'+${group.getGroupInfo().getId()}+'/managers'}">
+                                    <i class='fas fa-pen'></i>
+                                </a>
+                            </td>
+
+
+                        </tr>
+                        </tbody>
+                    </table>
+                    <form th:action="@{/admin/dashboard/groups/new}" method="post" th:object="${newGroup}">
+                        <div class="form-group">
+                            <label class="control-label" for="group">Խումբ </label> <input
+                                id="group" class="form-control" th:field="*{groupNumber}" required
+                                autofocus="autofocus"/>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Ավելացնել</button>
+                        </div>
+                    </form>
                 </div>
                 <div class="section_1_text" id="b">
                     <br>
                     <table class="table">
                         <thead>
                         <tr>
-                            <th scope="col">ID</th>
                             <th scope="col">Անուն</th>
                             <th scope="col">Ազգանուն</th>
                             <th scope="col">Հայրանուն</th>
@@ -72,8 +123,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="manager: ${managers}">
-                            <th scope="row" th:text="${manager.id}"></th>
-                            <td >
+                            <td>
                                 <span th:text="${manager.firstName}"></span>
                             </td>
                             <td>

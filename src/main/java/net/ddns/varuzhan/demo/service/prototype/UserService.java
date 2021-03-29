@@ -11,6 +11,7 @@ import java.util.TreeSet;
 public interface UserService {
     User save(User user);
     User getUserByEmail(String email);
+    User getUserById(String id);
     Set<User> getAllManagers();
     Set<User> getAllUsers();
 }

@@ -1,5 +1,6 @@
 package net.ddns.varuzhan.demo.controller.manager.dashboard;
 
+import net.ddns.varuzhan.demo.dto.ClassMaterialAdditionDto;
 import net.ddns.varuzhan.demo.fileupload.FileUploadUtil;
 import net.ddns.varuzhan.demo.model.*;
 import net.ddns.varuzhan.demo.service.prototype.FileService;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.TreeSet;
 import java.util.UUID;
 
@@ -41,34 +43,13 @@ public class ManagerDashboard {
                 + " " + userService.getUserByEmail(authentication.getName()).getMiddleName()
                 + " " + userService.getUserByEmail(authentication.getName()).getLastName();
         model.addAttribute("full_name", fullName);
+        HashSet<ClassMaterial> materials = new HashSet<>();
         TreeSet<GroupInfo> managerGroups = new TreeSet<>();
-        TreeSet<SubjectInfo> managerSubjects = new TreeSet<>();
         for(ManagersGroupsSubjects x : managersGroupsSubjectsService.getManagersGroupsUsersByManager(userService.getUserByEmail(authentication.getName()))){
             managerGroups.add(x.getGroupInfo());
-            managerSubjects.add(x.getSubjectInfo());
         }
         model.addAttribute("groups", managerGroups);
-        model.addAttribute("subjects", managerSubjects);
         return "manager/dashboard/managerDashboard";
     }
 
-    @PostMapping
-    public String saveMaterial(@RequestParam("material") MultipartFile multipartFile) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ClassMaterial material = new ClassMaterial();
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        File file = new File();
-        file.setFileToken(UUID.randomUUID().toString());
-        file.setAddedBy(userService.getUserByEmail(authentication.getName()));
-        file.setAddedAt(LocalDateTime.now());
-        String uploadDir = "users_files/" + userService.getUserByEmail(authentication.getName()).getId();
-        file.setFilePath(uploadDir + "/" + fileName);
-        try {
-            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-            fileService.saveFile(file);
-        } catch (IOException e) {
-            return "redirect:/error";
-        }
-        return "redirect:/manager/dashboard";
-    }
 }

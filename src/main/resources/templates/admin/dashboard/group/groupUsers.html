@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <title>StepUp</title>
+    <link rel="stylesheet" href="/static/css/styles_main.css">
+    <link rel="stylesheet" href="/static/library/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/library/bootstrap-grid.min.css">
+</head>
+<body>
+<div class="all_project">
+    <header>
+        <div class="header_section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="logo">
+                            <a href="/">StepUp</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 offset-md-4">
+                        <div class="menu">
+                            <a class="menu_item" href="#" th:text="*{full_name}"> </a>
+                            <a class="menu_item btn_1" href="/logout">Ելք</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <div class="container">
+            <div class="main_section">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="section_1">
+                            <div class="func_btn button-1"><p>Խմբերի և առարկաներ</p></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="section_2">
+                            <div class="func_btn button-2"><p>Դասախոսների և ուսանողներ</p></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="section_2">
+                            <div class="func_btn button-3"><p>Կառավարում</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section_1_text" id="a">
+                    <br>
+                    <br>
+                    <h4><span th:text="*{groupNumber}"> </span> խմբի ուսանողների ցանկը</h4>
+                    <br>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Անուն</th>
+                            <th scope="col">Ազգանուն</th>
+                            <th scope="col">Հայրանուն</th>
+                            <th scope="col">Էլ․ փոստ</th>
+                            <th scope="col">Հաշվի կարգավիճակ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr th:each="user: ${groupUsers}">
+                            <td>
+                                <span th:text="${user.firstName}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${user.lastName}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${user.middleName}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${user.email}"></span>
+                            </td>
+                            <td>
+                                <span th:if="${user.userStatus()==1}" style="color:OliveDrab;">Ակտիվ</span>
+                                <span th:if="${user.userStatus()==0}" style="color:OrangeRed;">Նախնական</span>
+                                <span th:if="${user.userStatus()==-1}" style="color:DarkRed;">Արգելափակված</span>
+                                <span><a th:href="@{'users/'+${user.getId()}+ '/changeAccountStatus'}"><i
+                                        class='fas fa-user-lock'></i></a></span>
+                            </td>
+                            <td>
+                                <span>
+                                    <a th:href="@{'users/'+${user.getId()}+ '/remove'}">
+                                        <i class='fas fa-user-minus'></i>
+                                    </a>
+                                </span>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <div th:if="${usersWithNoGroup.size()==0}">
+                        Ավելացնելու ենթակա ուսանողներ չկան
+                    </div>
+                    <form th:action="@{'users'}" method="post" th:object="${newGroupUser}" th:if="${usersWithNoGroup.size()>0}">
+                        <div class="form-group">
+                            <select th:field="*{userId}">
+                                <option th:each="user : ${usersWithNoGroup}" th:value="${user.id}" th:text="${user.firstName+' ' +user.lastName + ' ' + user.middleName}"
+                                ></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Ավելացնել</button>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="section_1_text" id="b">
+
+                </div>
+
+                <div class="section_1_text" id="c">
+
+                </div>
+
+
+            </div>
+        </div>
+    </main>
+
+
+    <footer>
+        <div class="footer">
+            <p>© 2021 Բոլոր իրավունքները պաշտպանված են</p>
+        </div>
+    </footer>
+</div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/static/js/script.js"></script>
+</html>

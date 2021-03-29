@@ -32,6 +32,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public User getUserById(String id) {
+        try{
+            return userRepository.findById(Integer.parseInt(id)).get();
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    @Override
     public Set<User> getAllManagers() {
        return new TreeSet<>(userRepository.findAllByRole(Role.MANAGER));
     }

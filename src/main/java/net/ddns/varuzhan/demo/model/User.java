@@ -165,7 +165,7 @@ public class User implements UserDetails, Comparable {
     @Override
     public int compareTo(Object o) {
         User user = (User) o;
-        return this.id - user.getId();
+        return (this.firstName+this.lastName+this.middleName+this.email).compareTo(user.firstName+user.lastName+user.middleName+user.email);
     }
     //-1 locked
     //0 non enabled
@@ -175,4 +175,6 @@ public class User implements UserDetails, Comparable {
         else if (!this.isEnabled()) return 0;
         else return 1;
     }
+
+
 }
