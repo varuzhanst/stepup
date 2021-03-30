@@ -12,7 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class GlobalLoginPage {
     @GetMapping
     public String loadLoginPage(){
-        return "login";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean hasUserRole = authentication.getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals("USER"));
+        boolean hasManagerRole = authentication.getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals("MANAGER"));
+        boolean hasAdminRole = authentication.getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals("ADMIN"));
+        if(!hasUserRole&&!hasAdminRole&&!hasManagerRole){
+            return "login";
+        }
+        else return successRedirect();
     }
 
     @GetMapping("/redirect")

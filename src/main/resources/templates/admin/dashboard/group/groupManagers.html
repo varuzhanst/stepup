@@ -58,7 +58,7 @@
                 <div class="section_1_text" id="a">
                     <br>
                     <br>
-                    <h4><span th:text="*{groupNumber}"> </span> խմբի ուսանողների ցանկը</h4>
+                    <h4><span th:text="*{groupNumber}"> </span> խմբի դասախոսների ցանկը</h4>
                     <br>
                     <table class="table">
                         <thead>
@@ -68,33 +68,45 @@
                             <th scope="col">Հայրանուն</th>
                             <th scope="col">Էլ․ փոստ</th>
                             <th scope="col">Հաշվի կարգավիճակ</th>
+                            <th scope="col">Առարկաների քանակ</th>
                         </tr>
                         </thead>
                         <tbody>
 
                         <tr th:each="user: ${groupUsers}">
                             <td>
-                                <span th:text="${user.firstName}"></span>
+                                <span th:text="${user.getUser().firstName}"></span>
                             </td>
                             <td>
-                                <span th:text="${user.lastName}"></span>
+                                <span th:text="${user.getUser().lastName}"></span>
                             </td>
                             <td>
-                                <span th:text="${user.middleName}"></span>
+                                <span th:text="${user.getUser().middleName}"></span>
                             </td>
                             <td>
-                                <span th:text="${user.email}"></span>
+                                <span th:text="${user.getUser().email}"></span>
                             </td>
                             <td>
-                                <span th:if="${user.userStatus()==1}" style="color:OliveDrab;">Ակտիվ</span>
-                                <span th:if="${user.userStatus()==0}" style="color:OrangeRed;">Նախնական</span>
-                                <span th:if="${user.userStatus()==-1}" style="color:DarkRed;">Արգելափակված</span>
-                                <span><a th:href="@{'users/'+${user.getId()}+ '/changeAccountStatus'}"><i
+                                <span th:if="${user.getUser().userStatus()==1}" style="color:OliveDrab;">Ակտիվ</span>
+                                <span th:if="${user.getUser().userStatus()==0}" style="color:OrangeRed;">Նախնական</span>
+                                <span th:if="${user.getUser().userStatus()==-1}" style="color:DarkRed;">Արգելափակված</span>
+                                <span><a th:href="@{'users/'+${user.getUser().getId()}+ '/changeAccountStatus'}"><i
                                         class='fas fa-user-lock'></i></a></span>
                             </td>
                             <td>
+                                <span  th:text="${user.getCountOfSubjects()}">
+
+                                </span>
                                 <span>
-                                    <a th:href="@{'users/'+${user.getId()}+ '/remove'}">
+
+                                    <a th:href="@{'managers/'+${user.getUser().getId()}+ '/subjects'}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    <a th:href="@{'managers/'+${user.getUser().getId()}+ '/remove'}">
                                         <i class='fas fa-user-minus'></i>
                                     </a>
                                 </span>
@@ -104,13 +116,13 @@
                         </tbody>
                     </table>
                     <br>
-                    <div th:if="${usersWithNoGroup.size()==0}">
-                        Ավելացնելու ենթակա ուսանողներ չկան
+                    <div th:if="${managersOutOfGroup.size()==0}">
+                        Ավելացնելու ենթակա դասախոսներ չկան
                     </div>
-                    <form th:action="@{'users'}" method="post" th:object="${newGroupUser}" th:if="${usersWithNoGroup.size()>0}">
+                    <form th:action="@{'managers'}" method="post" th:object="${newGroupUser}" th:if="${managersOutOfGroup.size()>0}">
                         <div class="form-group">
                             <select th:field="*{userId}">
-                                <option th:each="user : ${usersWithNoGroup}" th:value="${user.id}" th:text="${user.firstName+' ' +user.lastName + ' ' + user.middleName}"
+                                <option th:each="user : ${managersOutOfGroup}" th:value="${user.id}" th:text="${user.firstName+' ' +user.lastName + ' ' + user.middleName}"
                                 ></option>
                             </select>
                         </div>

@@ -2,10 +2,12 @@ package net.ddns.varuzhan.demo.controller.admin.dashboard.groups;
 
 import net.ddns.varuzhan.demo.dto.NewGroupDto;
 import net.ddns.varuzhan.demo.dto.NewGroupUserDto;
+import net.ddns.varuzhan.demo.dto.SubjectsManagementDto;
 import net.ddns.varuzhan.demo.model.GroupInfo;
 import net.ddns.varuzhan.demo.model.User;
 import net.ddns.varuzhan.demo.model.UserGroupInfo;
 import net.ddns.varuzhan.demo.service.prototype.GroupInfoService;
+import net.ddns.varuzhan.demo.service.prototype.ManagersGroupsSubjectsService;
 import net.ddns.varuzhan.demo.service.prototype.UserGroupInfoService;
 import net.ddns.varuzhan.demo.service.prototype.UserService;
 import org.springframework.security.core.Authentication;
@@ -14,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.TreeSet;
 
 @RequestMapping
@@ -23,11 +24,13 @@ public class GroupsManagementController {
     private final UserService userService;
     private final GroupInfoService groupInfoService;
     private final UserGroupInfoService userGroupInfoService;
+    private final ManagersGroupsSubjectsService managersGroupsSubjectsService;
 
-    public GroupsManagementController(UserService userService, GroupInfoService groupInfoService, UserGroupInfoService userGroupInfoService) {
+    public GroupsManagementController(UserService userService, GroupInfoService groupInfoService, UserGroupInfoService userGroupInfoService, ManagersGroupsSubjectsService managersGroupsSubjectsService) {
         this.userService = userService;
         this.groupInfoService = groupInfoService;
         this.userGroupInfoService = userGroupInfoService;
+        this.managersGroupsSubjectsService = managersGroupsSubjectsService;
     }
 
     @PostMapping("admin/dashboard/groups/new")
@@ -55,31 +58,46 @@ public class GroupsManagementController {
             model.addAttribute("full_name", fullName);
             model.addAttribute("groupNumber", group.getGroupNumber());
             model.addAttribute("groupUsers", users);
-            model.addAttribute("newGroupUser",new NewGroupUserDto());
+            model.addAttribute("newGroupUser", new NewGroupUserDto());
             model.addAttribute("usersWithNoGroup", userGroupInfoService.getUsersWithNoGroup());
             return "admin/dashboard/group/groupUsers";
         }
     }
+
     @PostMapping("admin/dashboard/groups/{groupId}/users")
-    public String newGroupUser(@PathVariable(required = false) String groupId,@ModelAttribute("newUser")NewGroupUserDto newGroupUserDto){
+    public String newGroupUser(@PathVariable(required = false) String groupId, @ModelAttribute("newUser") NewGroupUserDto newGroupUserDto) {
         UserGroupInfo userGroupInfo = new UserGroupInfo();
         GroupInfo group = groupInfoService.getGroupInfoById(groupId);
         User user = userService.getUserById(newGroupUserDto.getUserId());
-        if(group==null||user==null){
+        if (group == null || user == null) {
             return "redirect:/error";
-        }
-        else {
+        } else {
             userGroupInfo.setGroupInfo(group);
             userGroupInfo.setUser(user);
             userGroupInfoService.save(userGroupInfo);
-            return "redirect:/admin/dashboard/groups/" + groupId +"/users";
+            return "redirect:/admin/dashboard/groups/" + groupId + "/users";
+        }
+    }
+
+    @PostMapping("admin/dashboard/groups/{groupId}/managers")
+    public String newGroupManager(@PathVariable(required = false) String groupId, @ModelAttribute("newUser") NewGroupUserDto newGroupUserDto) {
+        UserGroupInfo userGroupInfo = new UserGroupInfo();
+        GroupInfo group = groupInfoService.getGroupInfoById(groupId);
+        User user = userService.getUserById(newGroupUserDto.getUserId());
+        if (group == null || user == null) {
+            return "redirect:/error";
+        } else {
+            userGroupInfo.setGroupInfo(group);
+            userGroupInfo.setUser(user);
+            userGroupInfoService.save(userGroupInfo);
+            return "redirect:/admin/dashboard/groups/" + groupId + "/managers";
         }
     }
 
     @GetMapping("admin/dashboard/groups/{groupId}/managers")
     public String loadManagersById(@PathVariable String groupId, Model model) {
         GroupInfo group = groupInfoService.getGroupInfoById(groupId);
-        if (group==null) {
+        if (group == null) {
             return "redirect:/admin/dashboard";
         } else {
             TreeSet<User> users = (TreeSet<User>) userGroupInfoService.getManagersByGroupInfo(group);
@@ -89,9 +107,15 @@ public class GroupsManagementController {
                     + " " + userService.getUserByEmail(authentication.getName()).getLastName();
             model.addAttribute("full_name", fullName);
             model.addAttribute("groupNumber", group.getGroupNumber());
-            model.addAttribute("groupUsers", users);
+            TreeSet<SubjectsManagementDto> subjectsManagementDto = new TreeSet<>();
+            for (User x : users) {
+                subjectsManagementDto.add(new SubjectsManagementDto(x, managersGroupsSubjectsService.getManagersGroupsAndSubjectsByGroupAndSubject(group, x).size()));
+            }
+            model.addAttribute("groupUsers", subjectsManagementDto);
+            model.addAttribute("newGroupUser", new NewGroupUserDto());
+            model.addAttribute("managersOutOfGroup", userGroupInfoService.getManagersOutOfGroup(group));
 
-            return "admin/dashboard/group/groupUsers";
+            return "admin/dashboard/group/groupManagers";
         }
     }
 
@@ -99,19 +123,34 @@ public class GroupsManagementController {
     public String removeUserFromGroup(@PathVariable String groupId, @PathVariable String userId) {
         User userById = userService.getUserById(userId);
         GroupInfo groupInfoById = groupInfoService.getGroupInfoById(groupId);
-        if(userById==null||groupInfoById==null){
+        if (userById == null || groupInfoById == null) {
             return "redirect:/error";
         }
-        UserGroupInfo userGroupInfo = userGroupInfoService.getUserGroupInfoByGroupInfoAndUser(groupInfoById,userById);
-        if(userGroupInfo==null){
+        UserGroupInfo userGroupInfo = userGroupInfoService.getUserGroupInfoByGroupInfoAndUser(groupInfoById, userById);
+        if (userGroupInfo == null) {
             return "redirect:/error";
-        }
-        else{
+        } else {
             userGroupInfoService.removeUserGroupInfo(userGroupInfo);
             return "redirect:/admin/dashboard/groups/" + groupId + "/users";
         }
 
     }
 
+    @GetMapping("admin/dashboard/groups/{groupId}/managers/{userId}/remove")
+    public String removeManagerFromGroup(@PathVariable String groupId, @PathVariable String userId) {
+        User userById = userService.getUserById(userId);
+        GroupInfo groupInfoById = groupInfoService.getGroupInfoById(groupId);
+        if (userById == null || groupInfoById == null) {
+            return "redirect:/error";
+        }
+        UserGroupInfo userGroupInfo = userGroupInfoService.getUserGroupInfoByGroupInfoAndUser(groupInfoById, userById);
+        if (userGroupInfo == null) {
+            return "redirect:/error";
+        } else {
+            userGroupInfoService.removeUserGroupInfo(userGroupInfo);
+            return "redirect:/admin/dashboard/groups/" + groupId + "/managers";
+        }
+
+    }
 
 }

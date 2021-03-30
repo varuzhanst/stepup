@@ -78,13 +78,13 @@
                         </thead>
                         <tbody>
                         <tr th:each="group:${groups}">
-                            <th>
+                            <td>
                                 <span th:text="${group.getGroupInfo().groupNumber}"></span>
 
-                            </th>
+                            </td>
                             <td>
                                 <span th:text="${group.getUsersCount()}"></span>
-                                <a th:href="@{'/admin/dashboard/groups/'+${group.getGroupInfo().getId()}+'/users'}" >
+                                <a th:href="@{'/admin/dashboard/groups/'+${group.getGroupInfo().getId()}+'/users'}">
                                     <i class='fas fa-pen'></i>
                                 </a>
                             </td>
@@ -108,6 +108,34 @@
                             <button type="submit" class="btn btn-success">Ավելացնել</button>
                         </div>
                     </form>
+                    <br>
+                    <br>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Առարկա</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="subject:${subjects}">
+                            <td>
+                                <span th:text="${subject.subjectName}"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <form th:action="@{/admin/dashboard/subjects/new}" method="post" th:object="${newSubject}">
+                        <div class="form-group">
+                            <label class="control-label" for="subject">Առարկա </label> <input
+                                id="subject" class="form-control" th:field="*{subjectName}" required
+                                autofocus="autofocus"/>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Ավելացնել</button>
+                        </div>
+                    </form>
+
                 </div>
                 <div class="section_1_text" id="b">
                     <br>

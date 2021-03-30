@@ -3,9 +3,11 @@ package net.ddns.varuzhan.demo.controller.admin.dashboard;
 
 import net.ddns.varuzhan.demo.dto.GroupsManagementDto;
 import net.ddns.varuzhan.demo.dto.NewGroupDto;
+import net.ddns.varuzhan.demo.dto.NewSubjectDto;
 import net.ddns.varuzhan.demo.model.GroupInfo;
 import net.ddns.varuzhan.demo.model.User;
 import net.ddns.varuzhan.demo.service.prototype.GroupInfoService;
+import net.ddns.varuzhan.demo.service.prototype.SubjectInfoService;
 import net.ddns.varuzhan.demo.service.prototype.UserGroupInfoService;
 import net.ddns.varuzhan.demo.service.prototype.UserService;
 import org.springframework.security.core.Authentication;
@@ -27,10 +29,12 @@ public class AdminDashboard {
     private final UserService userService;
     private final GroupInfoService groupInfoService;
     private final UserGroupInfoService userGroupInfoService;
-    public AdminDashboard(UserService userService, GroupInfoService groupInfoService, UserGroupInfoService userGroupInfoService) {
+    private final SubjectInfoService subjectInfoService;
+    public AdminDashboard(UserService userService, GroupInfoService groupInfoService, UserGroupInfoService userGroupInfoService, SubjectInfoService subjectInfoService) {
         this.userService = userService;
         this.groupInfoService = groupInfoService;
         this.userGroupInfoService = userGroupInfoService;
+        this.subjectInfoService = subjectInfoService;
     }
 
     @GetMapping
@@ -48,6 +52,8 @@ public class AdminDashboard {
         }
         model.addAttribute("groups",groupsManagementDtos);
         model.addAttribute("newGroup",new NewGroupDto());
+        model.addAttribute("subjects",subjectInfoService.getAllSubjectInfos());
+        model.addAttribute("newSubject",new NewSubjectDto());
         return "admin/dashboard/adminDashboard";
     }
     @GetMapping({"groups/{groupId}/users/{userId}/changeAccountStatus",

@@ -58,59 +58,40 @@
                 <div class="section_1_text" id="a">
                     <br>
                     <br>
-                    <h4><span th:text="*{groupNumber}"> </span> խմբի ուսանողների ցանկը</h4>
+                    <h4>Խումբ՝ <span th:text="*{groupNumber}"> </span></h4>
+                    <h4>Դասախոս՝ <span th:text="*{user}"> </span></h4>
+                    <h5>Առարկաներ</h5>
                     <br>
                     <table class="table">
                         <thead>
                         <tr>
-                            <th scope="col">Անուն</th>
-                            <th scope="col">Ազգանուն</th>
-                            <th scope="col">Հայրանուն</th>
-                            <th scope="col">Էլ․ փոստ</th>
-                            <th scope="col">Հաշվի կարգավիճակ</th>
+                            <th scope="col">Առարկա</th>
                         </tr>
                         </thead>
                         <tbody>
 
-                        <tr th:each="user: ${groupUsers}">
+                        <tr th:each="subject: ${subjects}">
                             <td>
-                                <span th:text="${user.firstName}"></span>
+                                <span th:text="${subject.getSubjectInfo().subjectName}"></span>
                             </td>
-                            <td>
-                                <span th:text="${user.lastName}"></span>
-                            </td>
-                            <td>
-                                <span th:text="${user.middleName}"></span>
-                            </td>
-                            <td>
-                                <span th:text="${user.email}"></span>
-                            </td>
-                            <td>
-                                <span th:if="${user.userStatus()==1}" style="color:OliveDrab;">Ակտիվ</span>
-                                <span th:if="${user.userStatus()==0}" style="color:OrangeRed;">Նախնական</span>
-                                <span th:if="${user.userStatus()==-1}" style="color:DarkRed;">Արգելափակված</span>
-                                <span><a th:href="@{'users/'+${user.getId()}+ '/changeAccountStatus'}"><i
-                                        class='fas fa-user-lock'></i></a></span>
-                            </td>
-                            <td>
-                                <span>
-                                    <a th:href="@{'users/'+${user.getId()}+ '/remove'}">
-                                        <i class='fas fa-user-minus'></i>
-                                    </a>
-                                </span>
-                            </td>
+                            <td><a th:href="@{'subjects/' + ${subject.getSubjectInfo().getId()}+'/remove'}">
+                                <i class="fa fa-minus"></i>
+                            </a>
 
+                            </td>
                         </tr>
                         </tbody>
                     </table>
                     <br>
-                    <div th:if="${usersWithNoGroup.size()==0}">
-                        Ավելացնելու ենթակա ուսանողներ չկան
+                    <div th:if="${eligibleSubjects.size()==0}">
+                        Ավելացնելու ենթակա առարկաներ չկան
                     </div>
-                    <form th:action="@{'users'}" method="post" th:object="${newGroupUser}" th:if="${usersWithNoGroup.size()>0}">
+                    <form th:action="@{'subjects'}" method="post" th:object="${newManagerSubject}"
+                          th:if="${eligibleSubjects.size()>0}">
                         <div class="form-group">
-                            <select th:field="*{userId}">
-                                <option th:each="user : ${usersWithNoGroup}" th:value="${user.id}" th:text="${user.firstName+' ' +user.lastName + ' ' + user.middleName}"
+                            <select th:field="*{subjectId}">
+                                <option th:each="subject : ${eligibleSubjects}" th:value="${subject.id}"
+                                        th:text="${subject.subjectName}"
                                 ></option>
                             </select>
                         </div>

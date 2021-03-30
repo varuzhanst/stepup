@@ -22,7 +22,7 @@ public class ClassMaterialsController {
         this.managersGroupsSubjectsService = managersGroupsSubjectsService;
         this.userService = userService;
     }
-
+/*
     @GetMapping("/manager/dashboard/classMaterials/{groupId}")
     public String loadGroupsPage(Model model, @PathVariable String groupId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -50,5 +50,5 @@ public class ClassMaterialsController {
         model.addAttribute("groupNumber",groupInfo.getGroupNumber());
         return "manager/dashboard/managerDashboardClassMaterialsForGroup";
     }
-
+*/
 }

@@ -35,7 +35,7 @@ public class ManagerDashboard {
         this.fileService = fileService;
         this.managersGroupsSubjectsService = managersGroupsSubjectsService;
     }
-
+/*
     @GetMapping
     public String loadManagerDashboard(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -51,5 +51,5 @@ public class ManagerDashboard {
         model.addAttribute("groups", managerGroups);
         return "manager/dashboard/managerDashboard";
     }
-
+*/
 }

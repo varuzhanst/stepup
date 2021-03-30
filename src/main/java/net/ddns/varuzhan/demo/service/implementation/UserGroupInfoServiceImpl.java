@@ -10,9 +10,11 @@ import net.ddns.varuzhan.demo.service.prototype.UserGroupInfoService;
 import net.ddns.varuzhan.demo.service.prototype.UserService;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 @Component
 public class UserGroupInfoServiceImpl implements UserGroupInfoService {
@@ -74,5 +76,23 @@ public class UserGroupInfoServiceImpl implements UserGroupInfoService {
     @Override
     public void removeUserGroupInfo(UserGroupInfo userGroupInfo) {
         userGroupInfoRepository.delete(userGroupInfo);
+    }
+
+    @Override
+    public Set<User> getManagersOutOfGroup(GroupInfo groupInfo) {
+        List<User> groupManagers = userGroupInfoRepository.findUserGroupInfosByGroupInfo(groupInfo)
+                .stream()
+                .filter(x->x.getUser().getRole()== Role.MANAGER)
+                .map(y->y.getUser())
+                .collect(Collectors.toList());
+        Set<User> allManagers = userService.getAllManagers();
+        HashSet<User> managersOutOfGroup = new HashSet<>();
+        for(User x: allManagers){
+            if(!groupManagers.contains(x)){
+                managersOutOfGroup.add(x);
+            }
+        }
+
+        return managersOutOfGroup;
     }
 }

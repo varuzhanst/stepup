@@ -36,7 +36,7 @@ public class GroupInfoServiceImpl implements GroupInfoService {
     public GroupInfo getGroupInfoById(String id) {
         try{
             Integer groupId = Integer.parseInt(id);
-            return groupInfoRepository.findById(groupId).get();
+            return groupInfoRepository.findById(groupId).orElse(null);
         }catch (Exception e){
             return null;
         }

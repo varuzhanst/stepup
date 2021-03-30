@@ -81,7 +81,7 @@
                     </table>
                     <div th:each="group:${groups}">
                         <button type="button" >
-                        <a th:href="@{'/manager/dashboard/classMaterials/'+${group.id}}" th:text="${group.groupNumber}"></a>
+                        <a th:href="@{'/manager/dashboard/classMaterials/'+${group.id}}" th:text="${group.subjectName}"></a>
                     </button>
                     <br>
                     </div>

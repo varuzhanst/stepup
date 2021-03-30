@@ -22,4 +22,6 @@ public interface UserGroupInfoService {
     UserGroupInfo getUserGroupInfoByGroupInfoAndUser(GroupInfo groupInfo, User user);
 
     void removeUserGroupInfo(UserGroupInfo userGroupInfo);
+
+    Set<User> getManagersOutOfGroup(GroupInfo groupInfo);
 }
