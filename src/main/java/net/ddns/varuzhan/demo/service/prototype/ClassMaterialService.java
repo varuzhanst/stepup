@@ -8,5 +8,6 @@ import java.util.Set;
 
 @Service
 public interface ClassMaterialService {
+    ClassMaterial save(ClassMaterial classMaterial);
     Set<ClassMaterial> getMaterialsByManagerGroupSubject(ManagersGroupsSubjects managersGroupsSubjects);
 }

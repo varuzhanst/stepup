@@ -17,6 +17,11 @@ public class ClassMaterialServiceImpl implements ClassMaterialService {
     }
 
     @Override
+    public ClassMaterial save(ClassMaterial classMaterial) {
+        return classMaterialsRepository.save(classMaterial);
+    }
+
+    @Override
     public Set<ClassMaterial> getMaterialsByManagerGroupSubject(ManagersGroupsSubjects managersGroupsSubjects) {
         return classMaterialsRepository.findClassMaterialsByManagersGroupsSubjects(managersGroupsSubjects);
     }

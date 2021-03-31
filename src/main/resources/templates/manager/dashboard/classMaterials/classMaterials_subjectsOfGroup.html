@@ -62,7 +62,7 @@
                     <br>
                     <br>
                     <br>
-                    <h4>Հասանելի խմբեր</h4>
+                    <h4>Հասանելի առարկաներ</h4>
                     <table class="table">
                         <thead>
                         <tr>
@@ -75,16 +75,16 @@
                                 Ձեզ հասանելի առարկաներ չկան
                             </span>
                         </tr>
-                        <tr th:each="subject:${subjects}">
+                        <tr th:each="availSubject:${subjects}">
 
                             <td>
-                                    <span th:text="${subject.subjectName}">
+                                    <span th:text="${availSubject.subjectName}">
 
                                     </span>
                             </td>
                             <td>
                                     <span>
-                                         <a th:href="@{'dashboard/classMaterials/groups/'+${group.getId()}+'/subjects/+'${subject.getId()}}" >
+                                         <a th:href="@{'/manager/dashboard/classMaterials/groups/'+${group.getId()}+'/subjects/'+${availSubject.getId()}}" >
                                             <i class="fa fa-external-link-square"></i>
                                          </a>
                                     </span>

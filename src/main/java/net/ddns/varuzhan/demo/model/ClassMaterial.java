@@ -1,5 +1,7 @@
 package net.ddns.varuzhan.demo.model;
 
+import com.sun.istack.Nullable;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -11,25 +13,13 @@ public class ClassMaterial implements Comparable{
     private Integer id;
     private String materialName;
     @ManyToOne
+    @Nullable
     private File file;
     @ManyToOne
     private ManagersGroupsSubjects managersGroupsSubjects;
     private LocalDateTime localDateTime;
 
     public ClassMaterial() {
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ClassMaterial that = (ClassMaterial) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 
     public Integer getId() {
@@ -74,5 +64,18 @@ public class ClassMaterial implements Comparable{
     @Override
     public int compareTo(Object o) {
         return this.id-((ClassMaterial)o).getId();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ClassMaterial that = (ClassMaterial) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

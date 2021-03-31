@@ -69,11 +69,7 @@
                         <thead>
                         <tr>
                             <th scope="col">Նյութի անվանում</th>
-                        </tr>
-                        <tr>
                             <th scope="col">Ավելացման ամսաթիվ</th>
-                        </tr>
-                        <tr>
                             <th scope="col">Կցված ֆայլ</th>
                         </tr>
                         </thead>
@@ -96,14 +92,14 @@
                                     </span>
                             </td>
                             <td>
-                                <a th:href="@{${material.getFile().getFilePath()}}">
+                                <a th:href="@{'/'+${material.getFile().getFilePath()}}">
                                      <span th:text="${material.getFile().getFileName()}">
                                     </span>
                                 </a>
                             </td>
                             <td>
                                     <span>
-                                         <a th:href="@{'dashboard/classMaterials/groups/'+${group.getId()}+'/subjects/+'${subject.getId()}+'/material/'+${material.getId()}+'remove'}">
+                                         <a th:href="@{'dashboard/classMaterials/groups/'+${group.getId()}+'/subjects/+'${subject.getId()}+'/material/'+${material.getId()}+'/remove'}">
                                            Հեռացնել
                                          </a>
                                     </span>
@@ -115,11 +111,16 @@
                     <br>
                     <br>
                     <h5>Նոր ուսումնական նյութ</h5>
-                    <form th:action="@{'/admin/dashboard/classMaterials/groups/'+${group.getId()}+'/subjects/' +${subject.getId()}}" method="post" th:object="${newMaterial}">
+                    <form th:action="@{'/manager/dashboard/classMaterials/groups/'+${group.getId()}+'/subjects/' +${subject.getId()}}" method="post" th:object="${newMaterial}"
+                          enctype="multipart/form-data">
                         <div class="form-group">
-                            <label class="control-label" for="subject">Առարկա </label> <input
-                                id="subject" class="form-control" th:field="*{subjectName}" required
+                            <label class="control-label" for="materialName">Նյութի անվանում </label>
+                            <input id="materialName" class="form-control" th:field="*{materialName}" required
                                 autofocus="autofocus"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="materialName">Նյութ (միայն PDF)</label>
+                            <input type="file" name="materialFile" accept="application/pdf"/>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-success">Ավելացնել</button>

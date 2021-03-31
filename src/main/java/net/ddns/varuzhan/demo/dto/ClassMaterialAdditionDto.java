@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ClassMaterialAdditionDto {
     private String materialName;
-    private MultipartFile file;
+    private MultipartFile materialFile;
 
     public ClassMaterialAdditionDto() {
     }
@@ -18,10 +18,10 @@ public class ClassMaterialAdditionDto {
     }
 
     public MultipartFile getFile() {
-        return file;
+        return materialFile;
     }
 
-    public void setFile(MultipartFile file) {
-        this.file = file;
+    public void setFile(MultipartFile materialFile) {
+        this.materialFile = materialFile;
     }
 }
