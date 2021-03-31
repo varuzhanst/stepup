@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class ClassMaterial {
+public class ClassMaterial implements Comparable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -14,6 +14,7 @@ public class ClassMaterial {
     private File file;
     @ManyToOne
     private ManagersGroupsSubjects managersGroupsSubjects;
+    private LocalDateTime localDateTime;
 
     public ClassMaterial() {
     }
@@ -61,5 +62,17 @@ public class ClassMaterial {
 
     public void setManagersGroupsSubjects(ManagersGroupsSubjects managersGroupsSubjects) {
         this.managersGroupsSubjects = managersGroupsSubjects;
+    }
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return this.id-((ClassMaterial)o).getId();
     }
 }

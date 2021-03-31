@@ -16,4 +16,5 @@ public interface ManagersGroupsSubjectsService {
     Set<SubjectInfo> getSubjectsWithoutManagerAndGroupInfo(User user, GroupInfo groupInfo);
     ManagersGroupsSubjects getManagerGroupSubjectByGroupManagerSubject(GroupInfo groupInfo,User user,SubjectInfo subjectInfo);
     void removeManagerGroupSubject(ManagersGroupsSubjects managersGroupsSubjects);
+    Set<ManagersGroupsSubjects> getManagersGroupAndSubjectInfos(User user);
 }

@@ -14,4 +14,5 @@ import java.util.Set;
 public interface ManagersGroupsSubjectsRepository extends JpaRepository<ManagersGroupsSubjects, Integer> {
     Set<ManagersGroupsSubjects> findManagersGroupsSubjectsByGroupInfoAndUser(GroupInfo groupInfo, User user);
     Optional<ManagersGroupsSubjects> findManagersGroupsSubjectsByGroupInfoAndUserAndSubjectInfo(GroupInfo groupInfo,User user,SubjectInfo subjectInfo);
+    Set<ManagersGroupsSubjects> findManagersGroupsSubjectsByUser(User user);
 }

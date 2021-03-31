@@ -52,5 +52,10 @@ public class ManagersGroupsSubjectsServiceImpl implements ManagersGroupsSubjects
         managersGroupsSubjectsRepository.delete(managersGroupsSubjects);
     }
 
+    @Override
+    public Set<ManagersGroupsSubjects> getManagersGroupAndSubjectInfos(User user) {
+        return managersGroupsSubjectsRepository.findManagersGroupsSubjectsByUser(user);
+    }
+
 
 }

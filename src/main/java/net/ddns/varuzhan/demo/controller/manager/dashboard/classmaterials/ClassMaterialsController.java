@@ -1,10 +1,8 @@
 package net.ddns.varuzhan.demo.controller.manager.dashboard.classmaterials;
 
-import net.ddns.varuzhan.demo.model.GroupInfo;
-import net.ddns.varuzhan.demo.model.ManagersGroupsSubjects;
-import net.ddns.varuzhan.demo.model.SubjectInfo;
-import net.ddns.varuzhan.demo.service.prototype.ManagersGroupsSubjectsService;
-import net.ddns.varuzhan.demo.service.prototype.UserService;
+import net.ddns.varuzhan.demo.dto.ClassMaterialAdditionDto;
+import net.ddns.varuzhan.demo.model.*;
+import net.ddns.varuzhan.demo.service.prototype.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -12,43 +10,72 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.HashSet;
 import java.util.TreeSet;
+
 
 @Controller
 public class ClassMaterialsController {
     private final ManagersGroupsSubjectsService managersGroupsSubjectsService;
     private final UserService userService;
-    public ClassMaterialsController(ManagersGroupsSubjectsService managersGroupsSubjectsService, UserService userService) {
+    private final GroupInfoService groupInfoService;
+    private final SubjectInfoService subjectInfoService;
+    private final ClassMaterialService classMaterialService;
+    public ClassMaterialsController(ManagersGroupsSubjectsService managersGroupsSubjectsService, UserService userService, GroupInfoService groupInfoService, SubjectInfoService subjectInfoService, ClassMaterialService classMaterialService) {
         this.managersGroupsSubjectsService = managersGroupsSubjectsService;
         this.userService = userService;
+        this.groupInfoService = groupInfoService;
+        this.subjectInfoService = subjectInfoService;
+        this.classMaterialService = classMaterialService;
     }
-/*
-    @GetMapping("/manager/dashboard/classMaterials/{groupId}")
-    public String loadGroupsPage(Model model, @PathVariable String groupId){
+
+    @GetMapping("/manager/dashboard/classMaterials/groups/{groupId}/subjects")
+    public String loadGroupsPage(Model model,@PathVariable String groupId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String fullName = userService.getUserByEmail(authentication.getName()).getFirstName()
-                + " " + userService.getUserByEmail(authentication.getName()).getMiddleName()
-                + " " + userService.getUserByEmail(authentication.getName()).getLastName();
+        User user=userService.getUserByEmail(authentication.getName());
+        String fullName = user.getFirstName()+ " " + user.getMiddleName()+ " " + user.getLastName();
         model.addAttribute("full_name", fullName);
-        TreeSet<SubjectInfo> managerSubjects = new TreeSet<>();
-        GroupInfo groupInfo=null;
-        boolean isGroupCorrect = false;
-        for(ManagersGroupsSubjects x : managersGroupsSubjectsService.getManagersGroupsUsersByManager(userService.getUserByEmail(authentication.getName()))){
-            if(x.getGroupInfo().getId().equals(Integer.parseInt(groupId)))
-            {
-                isGroupCorrect=true;
-                groupInfo=x.getGroupInfo();
-                break;
-            }
+        GroupInfo groupInfoById = groupInfoService.getGroupInfoById(groupId);
+        if (groupInfoById == null) {
+            return "redirect:/error";
         }
-        if(!isGroupCorrect) return "redirect:/error";
-        for(ManagersGroupsSubjects x : managersGroupsSubjectsService.getManagersGroupsUsersByManager(userService.getUserByEmail(authentication.getName()))){
-            if(x.getGroupInfo().getId().equals(Integer.parseInt(groupId)))
-                managerSubjects.add(x.getSubjectInfo());
+        HashSet<ManagersGroupsSubjects> subjects = (HashSet<ManagersGroupsSubjects>) managersGroupsSubjectsService.getManagersGroupsAndSubjectsByGroupAndSubject(groupInfoById, user);
+        TreeSet<SubjectInfo> subjectsOfGroup = new TreeSet<>();
+        for(ManagersGroupsSubjects x: subjects){
+            subjectsOfGroup.add(x.getSubjectInfo());
         }
-        model.addAttribute("subjects",managerSubjects);
-        model.addAttribute("groupNumber",groupInfo.getGroupNumber());
-        return "manager/dashboard/managerDashboardClassMaterialsForGroup";
+        TreeSet<GroupInfo> groupsOfManager = new TreeSet<>();
+        HashSet<ManagersGroupsSubjects> groupsAndSubjectsOfManager = (HashSet<ManagersGroupsSubjects>)managersGroupsSubjectsService.getManagersGroupAndSubjectInfos(user);
+        for(ManagersGroupsSubjects x: groupsAndSubjectsOfManager){
+            groupsOfManager.add(x.getGroupInfo());
+        }
+        model.addAttribute("group",groupInfoById);
+        model.addAttribute("subjects",subjectsOfGroup);
+        return "manager/dashboard/classMaterials/classMaterials_subjectsOfGroup";
     }
-*/
+    @GetMapping("/manager/dashboard/classMaterials/groups/{groupId}/subjects/{subjectId}")
+    public String loadGroupsPage(Model model,@PathVariable String groupId,@PathVariable String subjectId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user=userService.getUserByEmail(authentication.getName());
+        String fullName = user.getFirstName()+ " " + user.getMiddleName()+ " " + user.getLastName();
+        model.addAttribute("full_name", fullName);
+
+        GroupInfo groupInfoById = groupInfoService.getGroupInfoById(groupId);
+        SubjectInfo subjectInfoById = subjectInfoService.getSubjectInfoById(subjectId);
+
+        if (groupInfoById == null||subjectInfoById==null) {
+            return "redirect:/error";
+        }
+        ManagersGroupsSubjects managerGroupSubject = managersGroupsSubjectsService.getManagerGroupSubjectByGroupManagerSubject(groupInfoById,user,subjectInfoById);
+        if (managerGroupSubject==null) {
+            return "redirect:/error";
+        }
+        TreeSet<ClassMaterial> classMaterials =(TreeSet<ClassMaterial>)classMaterialService.getMaterialsByManagerGroupSubject(managerGroupSubject);
+
+        model.addAttribute("group",groupInfoById);
+        model.addAttribute("subject",subjectInfoById);
+        model.addAttribute("newMaterial", new ClassMaterialAdditionDto());
+        model.addAttribute("classMaterials",classMaterials);
+        return "manager/dashboard/classMaterials/classMaterialsView";
+    }
 }

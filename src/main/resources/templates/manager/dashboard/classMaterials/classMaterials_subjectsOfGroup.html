@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/static/css/styles_main.css">
     <link rel="stylesheet" href="/static/library/bootstrap.min.css">
     <link rel="stylesheet" href="/static/library/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div class="all_project">
@@ -58,27 +59,41 @@
 
                 </div>
                 <div class="section_1_text" id="b">
+                    <br>
+                    <br>
+                    <br>
+                    <h4>Հասանելի խմբեր</h4>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Առարկա</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <span th:if="${subjects.size()==0}">
+                                Ձեզ հասանելի առարկաներ չկան
+                            </span>
+                        </tr>
+                        <tr th:each="subject:${subjects}">
 
+                            <td>
+                                    <span th:text="${subject.subjectName}">
 
-                    <form th:action="@{/manager/dashboard/classMaterials}"
-                          method="post"
-                          enctype="multipart/form-data"
-                    >
-                        <div>
-                            <label>Խումբ։ </label>
-                            <span th:text="*{subjectName}"></span>
-                          <label>Առարկա: </label>
-                            <select>
-                                <option th:each="subject: ${subjects}" th:value="${subject.id}" th:text="${subject.subjectName}">
-                                </option>
-                            </select>
-                            <br>
+                                    </span>
+                            </td>
+                            <td>
+                                    <span>
+                                         <a th:href="@{'dashboard/classMaterials/groups/'+${group.getId()}+'/subjects/+'${subject.getId()}}" >
+                                            <i class="fa fa-external-link-square"></i>
+                                         </a>
+                                    </span>
 
-                        </div>
-                        <button type="submit">Ավելացնել</button>
-                    </form>
-                </div>
-                <div class="section_1_text" id="c">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
 
                 </div>
 

@@ -61,31 +61,50 @@
                 <div class="section_1_text" id="b">
                     <br>
                     <br>
+                    <h5>Խումբ՝<span th:text="*{group.groupNumber}"></span></h5>
+                    <h5>Առարկա՝<span th:text="*{subject.subjectName}"></span></h5>
                     <br>
-                    <h4>Հասանելի խմբեր</h4>
+                    <h4>Ավելացված նյութեր</h4>
                     <table class="table">
                         <thead>
                         <tr>
-                            <th scope="col">Խումբ</th>
+                            <th scope="col">Նյութի անվանում</th>
+                        </tr>
+                        <tr>
+                            <th scope="col">Ավելացման ամսաթիվ</th>
+                        </tr>
+                        <tr>
+                            <th scope="col">Կցված ֆայլ</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <span th:if="${groupsOfManager.size()==0}">
-                                Ձեզ հասանելի խմբեր չկան
+                            <span th:if="${classMaterials.size()==0}">
+                                Ավելացված ուսումնական նյութեր չկան
                             </span>
                         </tr>
-                        <tr th:each="group:${groupsOfManager}">
+                        <tr th:if="${classMaterials.size()>0}" th:each="material:${classMaterials}">
 
                             <td>
-                                    <span th:text="${group.groupNumber}">
+                                    <span th:text="${material.getMaterialName()}">
 
                                     </span>
                             </td>
                             <td>
+                                    <span th:text="${material.getLocalDateTime()}">
+
+                                    </span>
+                            </td>
+                            <td>
+                                <a th:href="@{${material.getFile().getFilePath()}}">
+                                     <span th:text="${material.getFile().getFileName()}">
+                                    </span>
+                                </a>
+                            </td>
+                            <td>
                                     <span>
-                                         <a th:href="@{'/manager/dashboard/classMaterials/groups/'+${group.getId()}+'/subjects'}" >
-                                            <i class="fa fa-external-link-square"></i>
+                                         <a th:href="@{'dashboard/classMaterials/groups/'+${group.getId()}+'/subjects/+'${subject.getId()}+'/material/'+${material.getId()}+'remove'}">
+                                           Հեռացնել
                                          </a>
                                     </span>
 
@@ -93,7 +112,19 @@
                         </tr>
                         </tbody>
                     </table>
-
+                    <br>
+                    <br>
+                    <h5>Նոր ուսումնական նյութ</h5>
+                    <form th:action="@{'/admin/dashboard/classMaterials/groups/'+${group.getId()}+'/subjects/' +${subject.getId()}}" method="post" th:object="${newMaterial}">
+                        <div class="form-group">
+                            <label class="control-label" for="subject">Առարկա </label> <input
+                                id="subject" class="form-control" th:field="*{subjectName}" required
+                                autofocus="autofocus"/>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Ավելացնել</button>
+                        </div>
+                    </form>
 
                 </div>
 

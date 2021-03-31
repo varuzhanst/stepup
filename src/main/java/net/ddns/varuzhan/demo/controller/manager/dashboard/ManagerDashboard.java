@@ -24,7 +24,7 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/manager/dashboard")
+@RequestMapping()
 public class ManagerDashboard {
     private final UserService userService;
     private final FileService fileService;
@@ -35,21 +35,20 @@ public class ManagerDashboard {
         this.fileService = fileService;
         this.managersGroupsSubjectsService = managersGroupsSubjectsService;
     }
-/*
-    @GetMapping
-    public String loadManagerDashboard(Model model) {
+
+    @GetMapping("/manager/dashboard")
+    public String loadGroupsPage(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String fullName = userService.getUserByEmail(authentication.getName()).getFirstName()
-                + " " + userService.getUserByEmail(authentication.getName()).getMiddleName()
-                + " " + userService.getUserByEmail(authentication.getName()).getLastName();
+        User user=userService.getUserByEmail(authentication.getName());
+        String fullName = user.getFirstName()+ " " + user.getMiddleName()+ " " + user.getLastName();
         model.addAttribute("full_name", fullName);
-        HashSet<ClassMaterial> materials = new HashSet<>();
-        TreeSet<GroupInfo> managerGroups = new TreeSet<>();
-        for(ManagersGroupsSubjects x : managersGroupsSubjectsService.getManagersGroupsUsersByManager(userService.getUserByEmail(authentication.getName()))){
-            managerGroups.add(x.getGroupInfo());
+        TreeSet<GroupInfo> groupsOfManager = new TreeSet<>();
+        HashSet<ManagersGroupsSubjects> groupsAndSubjectsOfManager = (HashSet<ManagersGroupsSubjects>)managersGroupsSubjectsService.getManagersGroupAndSubjectInfos(user);
+        for(ManagersGroupsSubjects x: groupsAndSubjectsOfManager){
+            groupsOfManager.add(x.getGroupInfo());
         }
-        model.addAttribute("groups", managerGroups);
+        model.addAttribute("groupsOfManager",groupsOfManager);
         return "manager/dashboard/managerDashboard";
     }
-*/
+
 }

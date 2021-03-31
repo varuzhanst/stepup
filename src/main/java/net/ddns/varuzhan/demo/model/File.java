@@ -9,30 +9,27 @@ public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String fileToken;
+    private String fileName;
     private String filePath;
     @ManyToOne
     private User addedBy;
 
-    public void setAddedBy(User addedBy) {
-        this.addedBy = addedBy;
-    }
-
-    public void setAddedAt(LocalDateTime addedAt) {
-        this.addedAt = addedAt;
-    }
-
-    private LocalDateTime addedAt;
 
     public File() {
     }
+    public String getFileName() {
+        return fileName;
+    }
 
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
     public User getAddedBy() {
         return addedBy;
     }
 
-    public LocalDateTime getAddedAt() {
-        return addedAt;
+    public void setAddedBy(User addedBy) {
+        this.addedBy = addedBy;
     }
 
     public Integer getId() {
@@ -43,13 +40,6 @@ public class File {
         this.id = id;
     }
 
-    public String getFileToken() {
-        return fileToken;
-    }
-
-    public void setFileToken(String fileToken) {
-        this.fileToken = fileToken;
-    }
 
     public String getFilePath() {
         return filePath;
