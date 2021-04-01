@@ -15,4 +15,5 @@ public interface ManagersGroupsSubjectsRepository extends JpaRepository<Managers
     Set<ManagersGroupsSubjects> findManagersGroupsSubjectsByGroupInfoAndUser(GroupInfo groupInfo, User user);
     Optional<ManagersGroupsSubjects> findManagersGroupsSubjectsByGroupInfoAndUserAndSubjectInfo(GroupInfo groupInfo,User user,SubjectInfo subjectInfo);
     Set<ManagersGroupsSubjects> findManagersGroupsSubjectsByUser(User user);
+    Set<ManagersGroupsSubjects> findManagersGroupsSubjectsByGroupInfo(GroupInfo groupInfo);
 }

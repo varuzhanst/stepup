@@ -10,4 +10,5 @@ import java.util.Set;
 public interface ClassMaterialService {
     ClassMaterial save(ClassMaterial classMaterial);
     Set<ClassMaterial> getMaterialsByManagerGroupSubject(ManagersGroupsSubjects managersGroupsSubjects);
+    ClassMaterial getMaterialById(String id);
 }

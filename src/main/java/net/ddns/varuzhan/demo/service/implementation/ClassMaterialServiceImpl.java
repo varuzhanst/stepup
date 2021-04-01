@@ -25,4 +25,9 @@ public class ClassMaterialServiceImpl implements ClassMaterialService {
     public Set<ClassMaterial> getMaterialsByManagerGroupSubject(ManagersGroupsSubjects managersGroupsSubjects) {
         return classMaterialsRepository.findClassMaterialsByManagersGroupsSubjects(managersGroupsSubjects);
     }
+
+    @Override
+    public ClassMaterial getMaterialById(String id) {
+        return classMaterialsRepository.findClassMaterialsById(Integer.parseInt(id)).orElse(null);
+    }
 }

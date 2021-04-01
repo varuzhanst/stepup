@@ -113,7 +113,7 @@ public class ClassMaterialsController {
         file.setAddedBy(user);
         file.setFileName(StringUtils.cleanPath(materialFile.getOriginalFilename()));
         String uploadDir = "user_files/" + user.getId()+"/classMaterials/"+classMaterial.getId();
-        file.setFilePath(uploadDir+"/"+file.getFileName());
+        file.setFilePath(uploadDir);
         FileUploadUtil.saveFile(uploadDir, file.getFileName(), materialFile);
         fileService.saveFile(file);
         classMaterial.setFile(file);

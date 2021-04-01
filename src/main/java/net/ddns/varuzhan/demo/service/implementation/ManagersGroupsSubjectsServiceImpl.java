@@ -57,5 +57,10 @@ public class ManagersGroupsSubjectsServiceImpl implements ManagersGroupsSubjects
         return managersGroupsSubjectsRepository.findManagersGroupsSubjectsByUser(user);
     }
 
+    @Override
+    public Set<ManagersGroupsSubjects> getManagerSubjectByGroup(GroupInfo groupInfo) {
+        return managersGroupsSubjectsRepository.findManagersGroupsSubjectsByGroupInfo(groupInfo);
+    }
+
 
 }

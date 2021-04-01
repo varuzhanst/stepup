@@ -9,4 +9,5 @@ import java.util.Set;
 
 public interface ClassMaterialsRepository extends JpaRepository<ClassMaterial,Integer> {
     Set<ClassMaterial> findClassMaterialsByManagersGroupsSubjects(ManagersGroupsSubjects managersGroupsSubjects);
+    Optional<ClassMaterial> findClassMaterialsById(Integer id);
 }

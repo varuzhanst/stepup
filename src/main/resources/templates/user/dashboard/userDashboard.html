@@ -22,7 +22,7 @@
                     </div>
                     <div class="col-md-6 offset-md-4">
                         <div class="menu">
-                            <a class="menu_item" href="#" th:text="*{full_name_group_number}"> </a>
+                            <a class="menu_item" href="/user/dashboard" th:text="*{full_name_group_number}"> </a>
                             <a class="menu_item btn_1" href="/logout">Ելք</a>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="section_2">
-                            <div class="func_btn button-2"><p>Ուսումնական նյութեր <span class="count">0</span></p></div>
+                            <div class="func_btn button-2"><p>Ուսումնական նյութեր <span class="count" th:text="${userMaterials.size()}">0</span></p></div>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -63,40 +63,16 @@
                         </p>
                         <p class="more"><a href="#">Ավելին>></a></p>
                     </div>
-                    <div class="task assignment">
-                        <p>
-                            <img src="../static/img/books-stack-of-three.png" width="30px"> Առարկա՝ Միկրոէլեկտրոնիկա<br>
-                            <img src="../static/img/teacher.png" width="30px"> Դասախոս՝ Ա․ Դարբինյան<br>
-                            <img src="../static/img/calendar.png" width="30px"> Վերջնաժամկետ՝ 16 Մարտ, 2021թ․
-                        </p>
-                        <p class="more"><a href="#">Ավելին>></a></p>
-                    </div>
-                    <div class="task assignment">
-                        <p>
-                            <img src="../static/img/books-stack-of-three.png" width="30px"> Առարկա՝ Միկրոէլեկտրոնիկա<br>
-                            <img src="../static/img/teacher.png" width="30px"> Դասախոս՝ Ա․ Դարբինյան<br>
-                            <img src="../static/img/calendar.png" width="30px"> Վերջնաժամկետ՝ 16 Մարտ, 2021թ․
-                        </p>
-                        <p class="more"><a href="#">Ավելին>></a></p>
-                    </div>
-                    <div class="task assignment">
-                        <p>
-                            <img src="../static/img/books-stack-of-three.png" width="30px"> Առարկա՝ Միկրոէլեկտրոնիկա<br>
-                            <img src="../static/img/teacher.png" width="30px"> Դասախոս՝ Ա․ Դարբինյան<br>
-                            <img src="../static/img/calendar.png" width="30px"> Վերջնաժամկետ՝ 16 Մարտ, 2021թ․
-                        </p>
-                        <p class="more"><a href="#">Ավելին>></a></p>
-                    </div>
                 </div>
                 <div class="section_1_text" id="b">
-                    <div class="task materials">
+                    <div class="task materials" th:each="classMaterial:${userMaterials}">
                         <p>
-                            <img src="../static/img/books-stack-of-three.png" width="30px"> Առարկա՝ Տվյալների հենքեր<br>
-                            <img src="../static/img/open-book.png" width="30px"> Թեմա՝ Ներածություն<br>
-                            <img src="../static/img/teacher.png" width="30px"> Դասախոս՝ Դ․ Ղազարյան
-
+                            Առարկա՝ <span th:text="${classMaterial.managersGroupsSubjects.subjectInfo.subjectName}"></span><br>
+                            Դասախոս՝ <span th:text="${classMaterial.managersGroupsSubjects.getUser().firstName+' '+classMaterial.managersGroupsSubjects.getUser().lastName+' '+classMaterial.managersGroupsSubjects.getUser().middleName}"></span><br>
+                            Ավելացվել է՝ <span th:text="${classMaterial.getLocalDateTime()}"></span><br>
+                            Անվանում՝  <a th:href="@{'/user/dashboard/classMaterials/'+${classMaterial.id}+'/downloadAttachedFile'}"><span th:text="${classMaterial.materialName}" style="font-weight: bold"></span><br></a>
                         </p>
-                        <p class="more"><a href="#">Ավելին>></a></p>
+
                     </div>
 
                 </div>
