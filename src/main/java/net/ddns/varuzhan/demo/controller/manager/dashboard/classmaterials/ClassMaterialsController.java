@@ -12,6 +12,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.TreeSet;
@@ -122,5 +127,18 @@ public class ClassMaterialsController {
         return "redirect:/error";
     }
         return "redirect:/manager/dashboard/classMaterials/groups/"+groupId+"/subjects/"+ subjectId;
+    }
+
+    @GetMapping("/manager/dashboard/classMaterials/{materialId}/remove")
+    public String removeClassMaterial(@PathVariable String materialId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User manager = userService.getUserByEmail(authentication.getName());
+        ClassMaterial materialById = classMaterialService.getMaterialById(materialId);
+        if (materialById.getManagersGroupsSubjects().getUser().equals(userService.getUserById(manager.getId().toString()))) {
+            classMaterialService.removeClassMaterial(materialById);
+            return "redirect:/manager/dashboard/classMaterials/groups/"+materialById.getManagersGroupsSubjects().getGroupInfo().getId()+"/subjects/"+materialById.getManagersGroupsSubjects().getSubjectInfo().getId();
+
+        }
+        else return "redirect:/error";
     }
 }

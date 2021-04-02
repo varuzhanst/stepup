@@ -4,6 +4,7 @@ import com.sun.istack.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
@@ -56,7 +57,9 @@ public class ClassMaterial implements Comparable{
     public LocalDateTime getLocalDateTime() {
         return localDateTime;
     }
-
+    public String getAddedAt(){
+        return DateTimeFormatter.ISO_LOCAL_DATE.format(this.localDateTime);
+    }
     public void setLocalDateTime(LocalDateTime localDateTime) {
         this.localDateTime = localDateTime;
     }

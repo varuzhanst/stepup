@@ -87,19 +87,19 @@
                                     </span>
                             </td>
                             <td>
-                                    <span th:text="${material.getLocalDateTime()}">
+                                    <span th:text="${material.getAddedAt()}">
 
                                     </span>
                             </td>
                             <td>
-                                <a th:href="@{'/'+${material.getFile().getFilePath()}}">
+                                <a th:href="@{'/manager/dashboard/classMaterials/'+${material.id}+'/downloadAttachedFile'}">
                                      <span th:text="${material.getFile().getFileName()}">
                                     </span>
                                 </a>
                             </td>
                             <td>
                                     <span>
-                                         <a th:href="@{'dashboard/classMaterials/groups/'+${group.getId()}+'/subjects/+'${subject.getId()}+'/material/'+${material.getId()}+'/remove'}">
+                                         <a th:href="@{'/manager/dashboard/classMaterials/'+${material.id}+'/remove'}">
                                            Հեռացնել
                                          </a>
                                     </span>

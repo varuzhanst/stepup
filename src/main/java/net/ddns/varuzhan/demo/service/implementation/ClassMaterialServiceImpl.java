@@ -30,4 +30,9 @@ public class ClassMaterialServiceImpl implements ClassMaterialService {
     public ClassMaterial getMaterialById(String id) {
         return classMaterialsRepository.findClassMaterialsById(Integer.parseInt(id)).orElse(null);
     }
+
+    @Override
+    public void removeClassMaterial(ClassMaterial classMaterial) {
+        classMaterialsRepository.delete(classMaterial);
+    }
 }

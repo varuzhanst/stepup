@@ -21,35 +21,30 @@ import java.nio.file.Paths;
 @Controller
 @RequestMapping
 public class FileDownloadController {
-private final UserService userService;
-private final UserGroupInfoService userGroupInfoService;
-private final ClassMaterialService classMaterialService;
+    private final UserService userService;
+    private final UserGroupInfoService userGroupInfoService;
+    private final ClassMaterialService classMaterialService;
+
     public FileDownloadController(UserService userService, UserGroupInfoService userGroupInfoService, ClassMaterialService classMaterialService) {
         this.userService = userService;
         this.userGroupInfoService = userGroupInfoService;
         this.classMaterialService = classMaterialService;
     }
-/*
-* Downloading the material attached file from student side.
-* */
+
     @GetMapping("/user/dashboard/classMaterials/{materialId}/downloadAttachedFile")
-    public void returnFile(@PathVariable String materialId, HttpServletResponse httpServletResponse){
+    public void returnFileToStudent(@PathVariable String materialId, HttpServletResponse httpServletResponse) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user=userService.getUserByEmail(authentication.getName());
-        if(user.getRole()!= Role.USER) throw new RuntimeException("Error 403. Unauthorized prompt");
+        User user = userService.getUserByEmail(authentication.getName());
         ClassMaterial materialById = classMaterialService.getMaterialById(materialId);
-        if(materialById.getManagersGroupsSubjects().getGroupInfo().equals(userGroupInfoService.getGroupInfoByUser(user).getGroupInfo())){
+        if (materialById.getManagersGroupsSubjects().getGroupInfo().equals(userGroupInfoService.getGroupInfoByUser(user).getGroupInfo())) {
             File fileInfo = materialById.getFile();
             Path file = Paths.get(fileInfo.getFilePath(), fileInfo.getFileName());
-            if (Files.exists(file))
-            {
-                httpServletResponse.addHeader("Content-Disposition", "attachment; filename="+fileInfo.getFileName());
-                try
-                {
+            if (Files.exists(file)) {
+                httpServletResponse.addHeader("Content-Disposition", "attachment; filename=" + fileInfo.getFileName());
+                try {
                     Files.copy(file, httpServletResponse.getOutputStream());
                     httpServletResponse.getOutputStream().flush();
-                }
-                catch (IOException ex) {
+                } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             }
@@ -57,4 +52,28 @@ private final ClassMaterialService classMaterialService;
 
 
     }
+
+    @GetMapping("/manager/dashboard/classMaterials/{materialId}/downloadAttachedFile")
+    public void returnFileToManager(@PathVariable String materialId, HttpServletResponse httpServletResponse) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User manager = userService.getUserByEmail(authentication.getName());
+        ClassMaterial materialById = classMaterialService.getMaterialById(materialId);
+        if (materialById.getManagersGroupsSubjects().getUser().equals(userService.getUserById(manager.getId().toString()))) {
+            File fileInfo = materialById.getFile();
+            Path file = Paths.get(fileInfo.getFilePath(), fileInfo.getFileName());
+            if (Files.exists(file)) {
+                httpServletResponse.addHeader("Content-Disposition", "attachment; filename=" + fileInfo.getFileName());
+                try {
+                    Files.copy(file, httpServletResponse.getOutputStream());
+                    httpServletResponse.getOutputStream().flush();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+
+
+    }
+
+
 }

@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="section_2">
-                            <div class="func_btn button-2"><p>Ուսումնական նյութեր <span class="count" th:text="${userMaterials.size()}">0</span></p></div>
+                            <div class="func_btn button-2"><p>Ուսումնական նյութեր</p></div>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -65,15 +65,29 @@
                     </div>
                 </div>
                 <div class="section_1_text" id="b">
-                    <div class="task materials" th:each="classMaterial:${userMaterials}">
-                        <p>
-                            Առարկա՝ <span th:text="${classMaterial.managersGroupsSubjects.subjectInfo.subjectName}"></span><br>
-                            Դասախոս՝ <span th:text="${classMaterial.managersGroupsSubjects.getUser().firstName+' '+classMaterial.managersGroupsSubjects.getUser().lastName+' '+classMaterial.managersGroupsSubjects.getUser().middleName}"></span><br>
-                            Ավելացվել է՝ <span th:text="${classMaterial.getLocalDateTime()}"></span><br>
-                            Անվանում՝  <a th:href="@{'/user/dashboard/classMaterials/'+${classMaterial.id}+'/downloadAttachedFile'}"><span th:text="${classMaterial.materialName}" style="font-weight: bold"></span><br></a>
-                        </p>
+                    <br>
+                    <form th:action="@{'managers'}" method="post" th:object="${newGroupUser}" th:if="${subjectsFilter.size()>0}">
+                        <div class="form-group">
+                            <select th:field="*{userId}">
+                                <option th:each="user : ${managersOutOfGroup}" th:value="${user.id}" th:text="${user.firstName+' ' +user.lastName + ' ' + user.middleName}"
+                                ></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Ավելացնել</button>
+                        </div>
+                    </form>
+                    <br>
+                        <div class="task materials" th:each="classMaterial:${userMaterials}">
+                            <p>
+                                Առարկա՝ <span th:text="${classMaterial.managersGroupsSubjects.subjectInfo.subjectName}"></span><br>
+                                Դասախոս՝ <span th:text="${classMaterial.managersGroupsSubjects.getUser().firstName+' '+classMaterial.managersGroupsSubjects.getUser().lastName+' '+classMaterial.managersGroupsSubjects.getUser().middleName}"></span><br>
+                                Ավելացվել է՝ <span th:text="${classMaterial.getAddedAt()}"></span><br>
+                                Անվանում՝ <span th:text="${classMaterial.materialName}" style="font-weight: bold"></span><br>
+                            </p>
+                            <p class="more"><a th:href="@{'/user/dashboard/classMaterials/'+${classMaterial.id}+'/downloadAttachedFile'}">Բեռնել>></a></p>
+                        </div>
 
-                    </div>
 
                 </div>
                 <div class="section_1_text" id="c">
