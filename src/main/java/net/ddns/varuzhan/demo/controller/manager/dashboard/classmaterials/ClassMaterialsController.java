@@ -12,12 +12,14 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.TreeSet;
 
@@ -136,6 +138,15 @@ public class ClassMaterialsController {
         ClassMaterial materialById = classMaterialService.getMaterialById(materialId);
         if (materialById.getManagersGroupsSubjects().getUser().equals(userService.getUserById(manager.getId().toString()))) {
             classMaterialService.removeClassMaterial(materialById);
+            Path rootPath = Paths.get(materialById.getFile().getFilePath());
+            try {
+                Files.walk(rootPath, FileVisitOption.FOLLOW_LINKS)
+                        .sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(java.io.File::delete);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return "redirect:/manager/dashboard/classMaterials/groups/"+materialById.getManagersGroupsSubjects().getGroupInfo().getId()+"/subjects/"+materialById.getManagersGroupsSubjects().getSubjectInfo().getId();
 
         }

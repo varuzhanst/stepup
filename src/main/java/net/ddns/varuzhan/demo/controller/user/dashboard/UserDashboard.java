@@ -1,14 +1,12 @@
 package net.ddns.varuzhan.demo.controller.user.dashboard;
 
 import net.ddns.varuzhan.demo.dto.SubjectsFilterDto;
+import net.ddns.varuzhan.demo.dto.SubjectsIDsForFilterDto;
 import net.ddns.varuzhan.demo.model.ClassMaterial;
 import net.ddns.varuzhan.demo.model.ManagersGroupsSubjects;
 import net.ddns.varuzhan.demo.model.SubjectInfo;
 import net.ddns.varuzhan.demo.model.UserGroupInfo;
-import net.ddns.varuzhan.demo.service.prototype.ClassMaterialService;
-import net.ddns.varuzhan.demo.service.prototype.ManagersGroupsSubjectsService;
-import net.ddns.varuzhan.demo.service.prototype.UserGroupInfoService;
-import net.ddns.varuzhan.demo.service.prototype.UserService;
+import net.ddns.varuzhan.demo.service.prototype.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -27,11 +25,13 @@ public class UserDashboard {
     private final UserGroupInfoService userGroupInfoService;
     private final ManagersGroupsSubjectsService managersGroupsSubjectsService;
     private final ClassMaterialService classMaterialService;
-    public UserDashboard(UserService userService, UserGroupInfoService userGroupInfoService, ManagersGroupsSubjectsService managersGroupsSubjectsService, ClassMaterialService classMaterialService) {
+    private final SubjectInfoService subjectInfoService;
+    public UserDashboard(UserService userService, UserGroupInfoService userGroupInfoService, ManagersGroupsSubjectsService managersGroupsSubjectsService, ClassMaterialService classMaterialService, SubjectInfoService subjectInfoService) {
         this.userService = userService;
         this.userGroupInfoService = userGroupInfoService;
         this.managersGroupsSubjectsService = managersGroupsSubjectsService;
         this.classMaterialService = classMaterialService;
+        this.subjectInfoService = subjectInfoService;
     }
 
     @RequestMapping("/user/dashboard")
@@ -44,13 +44,34 @@ public class UserDashboard {
         if(groupInfoByUser==null) return "redirect:/login?noGroup";
         HashSet<ManagersGroupsSubjects> userAvailableManagersSubjects= (HashSet<ManagersGroupsSubjects>) managersGroupsSubjectsService.getManagerSubjectByGroup(groupInfoByUser.getGroupInfo());
         TreeSet<ClassMaterial> userClassMaterials = new TreeSet<>();
-        TreeSet<SubjectInfo> userAvailableSubjects = new TreeSet<>();
+        TreeSet<SubjectsIDsForFilterDto> userAvailableSubjects = new TreeSet<>();
+        userAvailableSubjects.add(new SubjectsIDsForFilterDto("-1","Բոլոր առարկաները"));
         for(ManagersGroupsSubjects x : userAvailableManagersSubjects){
             Set<ClassMaterial> setOfMaterials = classMaterialService.getMaterialsByManagerGroupSubject(x);
             userClassMaterials.addAll(setOfMaterials);
-            userAvailableSubjects.add(x.getSubjectInfo());
+            userAvailableSubjects.add(new SubjectsIDsForFilterDto(x.getSubjectInfo().getId().toString(),x.getSubjectInfo().getSubjectName()));
         }
-        model.addAttribute("userMaterials",userClassMaterials);
+
+        if(subjectsFilterDto.getSubjectId() == null || subjectsFilterDto.getSubjectId().equals("-1")){
+            subjectsFilterDto.setSubjectId("-1");
+            model.addAttribute("userMaterials",userClassMaterials);
+            model.addAttribute("availSubjects",userAvailableSubjects);
+            model.addAttribute("subjectFilter",subjectsFilterDto);
+        }
+        else{
+            userClassMaterials.clear();
+            for(ManagersGroupsSubjects x : userAvailableManagersSubjects){
+
+                if(x.getSubjectInfo().equals(subjectInfoService.getSubjectInfoById(subjectsFilterDto.getSubjectId()))){
+                    Set<ClassMaterial> setOfMaterials = classMaterialService.getMaterialsByManagerGroupSubject(x);
+                    userClassMaterials.addAll(setOfMaterials);
+                }
+                userAvailableSubjects.add(new SubjectsIDsForFilterDto(x.getSubjectInfo().getId().toString(),x.getSubjectInfo().getSubjectName()));
+                model.addAttribute("userMaterials",userClassMaterials);
+                model.addAttribute("availSubjects",userAvailableSubjects);
+                model.addAttribute("subjectFilter",subjectsFilterDto);
+            }
+        }
         String groupNumber = " (" + groupInfoByUser.getGroupInfo().getGroupNumber() + ")";
         model.addAttribute("full_name_group_number", fullName + groupNumber );
 
