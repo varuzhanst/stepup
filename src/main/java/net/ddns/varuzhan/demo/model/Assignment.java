@@ -3,6 +3,7 @@ package net.ddns.varuzhan.demo.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
@@ -94,6 +95,12 @@ public class Assignment implements Comparable{
         this.maxGrade = maxGrade;
     }
 
+    public String getAddedAtNormal(){
+        return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(this.addedAt);
+    }
+    public String getDeadlineNormal(){
+        return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(this.deadline);
+    }
 
     @Override
     public int compareTo(Object o) {

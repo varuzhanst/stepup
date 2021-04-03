@@ -116,13 +116,13 @@ public class AssignmentsController {
         assignment.setDeadline(assignmentAdditionDto.getDeadlineLocal());
         assignment.setManagersGroupsSubjects(managerGroupSubject);
         assignment.setMaxGrade(Integer.parseInt(assignmentAdditionDto.getMaxGrade()));
-
+        assignment=assignmentService.save(assignment);
 
     try{
         File file = new File();
         file.setAddedBy(user);
         file.setFileName(StringUtils.cleanPath(materialFile.getOriginalFilename()));
-        String uploadDir = "user_files/" + user.getId()+"/assignment/"+assignment.getId()+"description_file";
+        String uploadDir = "user_files/" + user.getId()+"/assignment/"+assignment.getId()+"/description_file";
         file.setFilePath(uploadDir);
         FileUploadUtil.saveFile(uploadDir, file.getFileName(), materialFile);
         fileService.saveFile(file);

@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Service
 public interface AssignmentService {
-    void save(Assignment assignment);
+    Assignment save(Assignment assignment);
     Set<Assignment> getAssignmentsByManagerGroupSubject(ManagersGroupsSubjects managerGroupSubject);
     Assignment getAssignmentById(String id);
     void removeAssignment(Assignment assignmentById);
