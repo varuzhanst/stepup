@@ -40,17 +40,17 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="section_1">
-                            <div class="func_btn button-1"><p>Հանձնարարություններ</p></div>
+                            <div class="func_btn button-1"><p>Հանձնարարություններ </p></div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="section_2">
-                            <div class="func_btn button-2"><p>Ուսումնական նյութեր</p></div>
+                            <div class="func_btn button-2"><p>Ուսումնական նյութեր </p></div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="section_3">
-                            <div class="func_btn button-3"><p>Քննություններ</p></div>
+                            <div class="func_btn button-3"><p>Քննություններ </p></div>
                         </div>
                     </div>
                 </div>
@@ -59,28 +59,29 @@
                     <br>
                     <br>
                     <br>
-                    <h4>Հասանելի խմբեր</h4>
-                    <br>
-                    <span th:if="${groupsOfManager.size()==0}">
-                                Ձեզ հասանելի խմբեր չկան
-                            </span>
-                    <table class="table" th:if="${groupsOfManager.size()>0}">
+                    <h4>Հասանելի առարկաներ</h4>
+                    <table class="table">
                         <thead>
                         <tr>
-                            <th scope="col">Խումբ</th>
+                            <th scope="col">Առարկա</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="group:${groupsOfManager}">
+                        <tr>
+                            <span th:if="${subjects.size()==0}">
+                                Ձեզ հասանելի առարկաներ չկան
+                            </span>
+                        </tr>
+                        <tr th:each="availSubject:${subjects}">
 
                             <td>
-                                    <span th:text="${group.groupNumber}">
+                                    <span th:text="${availSubject.subjectName}">
 
                                     </span>
                             </td>
                             <td>
                                     <span>
-                                         <a th:href="@{'/manager/dashboard/assignments/groups/'+${group.getId()}+'/subjects'}" >
+                                         <a th:href="@{'/manager/dashboard/assignments/groups/'+${group.getId()}+'/subjects/'+${availSubject.getId()}}" >
                                             <i class="fa fa-external-link-square"></i>
                                          </a>
                                     </span>
@@ -91,39 +92,7 @@
                     </table>
                 </div>
                 <div class="section_1_text" id="b">
-                    <br>
-                    <br>
-                    <br>
-                    <h4>Հասանելի խմբեր</h4>
-                    <br>
-                    <span th:if="${groupsOfManager.size()==0}">
-                                Ձեզ հասանելի խմբեր չկան
-                            </span>
-                    <table class="table" th:if="${groupsOfManager.size()>0}">
-                        <thead>
-                        <tr>
-                            <th scope="col">Խումբ</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="group:${groupsOfManager}">
 
-                            <td>
-                                    <span th:text="${group.groupNumber}">
-
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                         <a th:href="@{'/manager/dashboard/classMaterials/groups/'+${group.getId()}+'/subjects'}" >
-                                            <i class="fa fa-external-link-square"></i>
-                                         </a>
-                                    </span>
-
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
 
 
                 </div>

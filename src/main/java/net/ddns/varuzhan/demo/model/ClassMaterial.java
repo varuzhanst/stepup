@@ -14,7 +14,6 @@ public class ClassMaterial implements Comparable{
     private Integer id;
     private String materialName;
     @ManyToOne
-    @Nullable
     private File file;
     @ManyToOne
     private ManagersGroupsSubjects managersGroupsSubjects;

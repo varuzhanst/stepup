@@ -1,6 +1,7 @@
 package net.ddns.varuzhan.demo.controller;
 
 import net.ddns.varuzhan.demo.model.*;
+import net.ddns.varuzhan.demo.service.prototype.AssignmentService;
 import net.ddns.varuzhan.demo.service.prototype.ClassMaterialService;
 import net.ddns.varuzhan.demo.service.prototype.UserGroupInfoService;
 import net.ddns.varuzhan.demo.service.prototype.UserService;
@@ -24,15 +25,17 @@ public class FileDownloadController {
     private final UserService userService;
     private final UserGroupInfoService userGroupInfoService;
     private final ClassMaterialService classMaterialService;
+    private final AssignmentService assignmentService;
 
-    public FileDownloadController(UserService userService, UserGroupInfoService userGroupInfoService, ClassMaterialService classMaterialService) {
+    public FileDownloadController(UserService userService, UserGroupInfoService userGroupInfoService, ClassMaterialService classMaterialService, AssignmentService assignmentService) {
         this.userService = userService;
         this.userGroupInfoService = userGroupInfoService;
         this.classMaterialService = classMaterialService;
+        this.assignmentService = assignmentService;
     }
 
     @GetMapping("/user/dashboard/classMaterials/{materialId}/downloadAttachedFile")
-    public void returnFileToStudent(@PathVariable String materialId, HttpServletResponse httpServletResponse) {
+    public void returnMaterialFileToStudent(@PathVariable String materialId, HttpServletResponse httpServletResponse) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByEmail(authentication.getName());
         ClassMaterial materialById = classMaterialService.getMaterialById(materialId);
@@ -54,7 +57,7 @@ public class FileDownloadController {
     }
 
     @GetMapping("/manager/dashboard/classMaterials/{materialId}/downloadAttachedFile")
-    public void returnFileToManager(@PathVariable String materialId, HttpServletResponse httpServletResponse) {
+    public void returnMaterialFileToManager(@PathVariable String materialId, HttpServletResponse httpServletResponse) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User manager = userService.getUserByEmail(authentication.getName());
         ClassMaterial materialById = classMaterialService.getMaterialById(materialId);
@@ -75,5 +78,29 @@ public class FileDownloadController {
 
     }
 
+    @GetMapping("/manager/dashboard/assignment/{assignmentId}/downloadDescriptionFile")
+    public void returnDescriptionFileToManager(@PathVariable String assignmentId, HttpServletResponse httpServletResponse) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User manager = userService.getUserByEmail(authentication.getName());
+        Assignment assignmentById = assignmentService.getAssignmentById(assignmentId);
+        if(assignmentById!=null){
+            if (assignmentById.getManagersGroupsSubjects().getUser().equals(userService.getUserById(manager.getId().toString()))) {
+                File fileInfo = assignmentById.getDescriptionFile();
+                Path file = Paths.get(fileInfo.getFilePath(), fileInfo.getFileName());
+                if (Files.exists(file)) {
+                    httpServletResponse.addHeader("Content-Disposition", "attachment; filename=" + fileInfo.getFileName());
+                    try {
+                        Files.copy(file, httpServletResponse.getOutputStream());
+                        httpServletResponse.getOutputStream().flush();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+
+
+
+    }
 
 }
