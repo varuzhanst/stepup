@@ -39,7 +39,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="section_1">
-                            <div class="func_btn button-1"><p>Հանձնարարություններ <span class="count">0</span></p></div>
+                            <div class="func_btn button-1"><p>Հանձնարարություններ <span class="count" th:text="${userAssignments.size()}" style="font-weight: bold"></span></p></div>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -55,13 +55,14 @@
                 </div>
 
                 <div class="section_1_text" id="a">
-                    <div class="task assignment">
+                    <div class="task assignment" th:each="assignment:${userAssignments}">
                         <p>
-                            <img src="../static/img/books-stack-of-three.png" width="30px"> Առարկա՝ Միկրոէլեկտրոնիկա<br>
-                            <img src="../static/img/teacher.png" width="30px"> Դասախոս՝ Ա․ Դարբինյան<br>
-                            <img src="../static/img/calendar.png" width="30px"> Վերջնաժամկետ՝ 16 Մարտ, 2021թ․
+                            Առարկա՝ <span th:text="${assignment.managersGroupsSubjects.subjectInfo.subjectName}"></span><br>
+                            Դասախոս՝ <span th:text="${assignment.managersGroupsSubjects.getUser().firstName+' '+assignment.managersGroupsSubjects.getUser().lastName+' '+assignment.managersGroupsSubjects.getUser().middleName}"></span><br>
+                            Վերջնաժամկետ՝ <span th:text="${assignment.getDeadlineNormal()}"></span><br>
+                            Անվանում՝ <span th:text="${assignment.assignmentName}" style="font-weight: bold"></span><br>
                         </p>
-                        <p class="more"><a href="#">Ավելին>></a></p>
+                        <p class="more" style="font-weight: bold"><a th:href="@{'/user/dashboard/assignments/'+${assignment.id}+'/downloadAssignmentDescription'}">Նկարագրություն</a></p>
                     </div>
                 </div>
                 <div class="section_1_text" id="b">
@@ -85,7 +86,7 @@
                                 Ավելացվել է՝ <span th:text="${classMaterial.getAddedAt()}"></span><br>
                                 Անվանում՝ <span th:text="${classMaterial.materialName}" style="font-weight: bold"></span><br>
                             </p>
-                            <p class="more"><a th:href="@{'/user/dashboard/classMaterials/'+${classMaterial.id}+'/downloadAttachedFile'}">Բեռնել>></a></p>
+                            <p class="more" style="font-weight: bold"><a th:href="@{'/user/dashboard/classMaterials/'+${classMaterial.id}+'/downloadAttachedFile'}">Բեռնել</a></p>
                         </div>
 
 
