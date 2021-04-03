@@ -39,7 +39,10 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="section_1">
-                            <div class="func_btn button-1"><p>Հանձնարարություններ <span class="count" th:text="${userAssignments.size()}" style="font-weight: bold"></span></p></div>
+                            <div class="func_btn button-1"><p>Հանձնարարություններ <span class="count"
+                                                                                        th:text="${waitingAssignments.size()+deadlinePassedAssignments.size()}"
+                                                                                        style="font-weight: bold"></span>
+                            </p></div>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -55,22 +58,135 @@
                 </div>
 
                 <div class="section_1_text" id="a">
-                    <div class="task assignment" th:each="assignment:${userAssignments}">
+                    <p th:if="${deadlinePassedAssignments.size()>0}">Վերջնաժամկետը հատած հանձնարարություններ</p>
+                    <div style="background-color: pink" class="task assignment"
+                         th:each="assignment:${deadlinePassedAssignments}">
                         <p>
                             Առարկա՝ <span th:text="${assignment.managersGroupsSubjects.subjectInfo.subjectName}"></span><br>
-                            Դասախոս՝ <span th:text="${assignment.managersGroupsSubjects.getUser().firstName+' '+assignment.managersGroupsSubjects.getUser().lastName+' '+assignment.managersGroupsSubjects.getUser().middleName}"></span><br>
+                            Դասախոս՝ <span
+                                th:text="${assignment.managersGroupsSubjects.getUser().firstName+' '+assignment.managersGroupsSubjects.getUser().lastName+' '+assignment.managersGroupsSubjects.getUser().middleName}"></span><br>
                             Վերջնաժամկետ՝ <span th:text="${assignment.getDeadlineNormal()}"></span><br>
                             Անվանում՝ <span th:text="${assignment.assignmentName}" style="font-weight: bold"></span><br>
+                        <p style="font-style: italic"><a
+                                th:href="@{'/user/dashboard/assignments/'+${assignment.id}+'/downloadAssignmentDescription'}">Նկարագրության
+                            ֆայլ</a></p>
+                        <form th:action="@{'/user/dashboard/assignments/'+${assignment.id}+'/turnIn'}"
+                              method="post"
+                              enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="control-label" for="attachedFile1">Կցել ֆայլ</label>
+                                <input type="file" name="attachedFile" id="attachedFile1"
+                                       required/>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success">Հանձնել</button>
+                            </div>
+                        </form>
                         </p>
-                        <p class="more" style="font-weight: bold"><a th:href="@{'/user/dashboard/assignments/'+${assignment.id}+'/downloadAssignmentDescription'}">Նկարագրություն</a></p>
+
+                    </div>
+                    <p th:if="${waitingAssignments.size()>0}">Կատարման ենթակա հանձնարարություններ</p>
+                    <div class="task assignment" th:each="assignment:${waitingAssignments}">
+                        <p>
+                            Առարկա՝ <span th:text="${assignment.managersGroupsSubjects.subjectInfo.subjectName}"></span><br>
+                            Դասախոս՝ <span
+                                th:text="${assignment.managersGroupsSubjects.getUser().firstName+' '+assignment.managersGroupsSubjects.getUser().lastName+' '+assignment.managersGroupsSubjects.getUser().middleName}"></span><br>
+                            Վերջնաժամկետ՝ <span th:text="${assignment.getDeadlineNormal()}"></span><br>
+                            Անվանում՝ <span th:text="${assignment.assignmentName}" style="font-weight: bold"></span><br>
+                        <p style="font-style: italic"><a
+                                th:href="@{'/user/dashboard/assignments/'+${assignment.id}+'/downloadAssignmentDescription'}">Նկարագրության
+                            ֆայլ</a></p>
+                        <form th:action="@{'/user/dashboard/assignments/'+${assignment.id}+'/turnIn'}"
+                              method="post"
+                              enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="control-label" for="attachedFile2">Կցել ֆայլ</label>
+                                <input type="file" name="attachedFile" id="attachedFile2"
+                                       required/>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success">Հանձնել</button>
+                            </div>
+                        </form>
+                        </p>
+                    </div>
+                    <p th:if="${turnedInAssignments.size()>0}">Ժամանակին կատարված հանձնարարություններ</p>
+                    <div class="task assignment"
+                         th:each="assignmentReturned:${turnedInAssignments}">
+                        <p>
+                            Առարկա՝ <span
+                                th:text="${assignmentReturned.assignment.managersGroupsSubjects.subjectInfo.subjectName}"></span><br>
+                            Դասախոս՝ <span
+                                th:text="${assignmentReturned.assignment.managersGroupsSubjects.getUser().firstName+' '+assignmentReturned.assignment.managersGroupsSubjects.getUser().lastName+' '+assignmentReturned.assignment.managersGroupsSubjects.getUser().middleName}"></span><br>
+                            Վերջնաժամկետ՝ <span
+                                th:text="${assignmentReturned.assignment.getDeadlineNormal()}"></span><br>
+                            Հանձնվել է՝ <span th:text="${assignmentReturned.getTurnedInAt()}"></span><br>
+                            Անվանում՝ <span th:text="${assignmentReturned.assignment.assignmentName}"
+                                            style="font-weight: bold"></span><br>
+                        <p style="font-style: italic"><a
+                                th:href="@{'/user/dashboard/assignments/'+${assignmentReturned.assignment.id}+'/downloadAssignmentDescription'}">Նկարագրության
+                            ֆայլ</a></p>
+                        <p style="font-style: italic"><a
+                                th:href="@{'/user/dashboard/assignments/'+${assignmentReturned.id}+'/downloadAttachedFile'}">Հանձնած
+                            ֆայլ</a></p>
+                        </p>
+
+                    </div>
+                    <p th:if="${lateTurnedInAssignments.size()>0}">Ուշ կատարված հանձնարարություններ</p>
+                    <div style="background-color: pink" class="task assignment"
+                         th:each="assignmentReturned:${lateTurnedInAssignments}">
+                        <p>
+                            Առարկա՝ <span
+                                th:text="${assignmentReturned.assignment.managersGroupsSubjects.subjectInfo.subjectName}"></span><br>
+                            Դասախոս՝ <span
+                                th:text="${assignmentReturned.assignment.managersGroupsSubjects.getUser().firstName+' '+assignmentReturned.assignment.managersGroupsSubjects.getUser().lastName+' '+assignmentReturned.assignment.managersGroupsSubjects.getUser().middleName}"></span><br>
+                            Վերջնաժամկետ՝ <span
+                                th:text="${assignmentReturned.assignment.getDeadlineNormal()}"></span><br>
+                            Հանձնվել է՝ <span th:text="${assignmentReturned.getTurnedInAt()}"></span><br>
+                            Անվանում՝ <span th:text="${assignmentReturned.assignment.assignmentName}"
+                                            style="font-weight: bold"></span><br>
+                        <p style="font-style: italic"><a
+                                th:href="@{'/user/dashboard/assignments/'+${assignmentReturned.assignment.id}+'/downloadAssignmentDescription'}">Նկարագրության
+                            ֆայլ</a></p>
+                        <p style="font-style: italic"><a
+                                th:href="@{'/user/dashboard/assignments/'+${assignmentReturned.id}+'/downloadAttachedFile'}">Հանձնած
+                            ֆայլ</a></p>
+                        </p>
+
+                    </div>
+                    <p th:if="${returnedAssignments.size()>0}">Գնահատված հանձնարարություններ</p>
+                    <div class="task assignment" th:each="assignmentReturned:${returnedAssignments}">
+                        <p>
+                            Առարկա՝ <span
+                                th:text="${assignmentReturned.assignment.managersGroupsSubjects.subjectInfo.subjectName}"></span><br>
+                            Դասախոս՝ <span
+                                th:text="${assignmentReturned.assignment.managersGroupsSubjects.getUser().firstName+' '+assignmentReturned.assignment.managersGroupsSubjects.getUser().lastName+' '+assignmentReturned.assignment.managersGroupsSubjects.getUser().middleName}"></span><br>
+                            Վերջնաժամկետ՝ <span
+                                th:text="${assignmentReturned.assignment.getDeadlineNormal()}"></span><br>
+                            Հանձնվել է՝ <span th:text="${assignmentReturned.getTurnedInAt()}"></span><br>
+                            Անվանում՝ <span th:text="${assignmentReturned.assignment.assignmentName}"
+                                            style="font-weight: bold"></span><br>
+                        <p style="font-style: italic"><a
+                                th:href="@{'/user/dashboard/assignments/'+${assignmentReturned.assignment.id}+'/downloadAssignmentDescription'}">Նկարագրության ֆայլ</a>
+                        </p>
+                        <p style="font-style: italic"><a
+                                th:href="@{'/user/dashboard/assignments/'+${assignmentReturned.id}+'/downloadAttachedFile'}">Հանձնած
+                            ֆայլ</a></p>
+                        Գնահատվել է՝ <span th:text="${assignmentReturned.getReturnedAt()}"></span><br>
+                        Գնահատական՝ <span th:text="${assignmentReturned.actualGrade}"></span>/<span
+                            th:text="${assignmentReturned.assignment.maxGrade}"></span><br>
+                        </p>
+
                     </div>
                 </div>
                 <div class="section_1_text" id="b">
                     <br>
-                    <form th:action="@{'/user/dashboard'}" method="post" th:object="${subjectFilter}" th:if="${userMaterials.size()>0}">
+                    <form th:action="@{'/user/dashboard'}" method="post" th:object="${subjectFilter}"
+                          th:if="${userMaterials.size()>0}">
                         <div class="form-group">
                             <select th:field="*{subjectId}">
-                                <option th:each="subject : ${availSubjects}" th:value="${subject.filterId}" th:text="${subject.filterName}" th:selected="${subject.filterId==subjectId}"
+                                <option th:each="subject : ${availSubjects}" th:value="${subject.filterId}"
+                                        th:text="${subject.filterName}" th:selected="${subject.filterId==subjectId}"
                                 ></option>
                             </select>
                         </div>
@@ -79,17 +195,20 @@
                         </div>
                     </form>
                     <br>
-                        <div class="task materials" th:each="classMaterial:${userMaterials}">
-                            <p>
-                                Առարկա՝ <span th:text="${classMaterial.managersGroupsSubjects.subjectInfo.subjectName}"></span><br>
-                                Դասախոս՝ <span th:text="${classMaterial.managersGroupsSubjects.getUser().firstName+' '+classMaterial.managersGroupsSubjects.getUser().lastName+' '+classMaterial.managersGroupsSubjects.getUser().middleName}"></span><br>
-                                Ավելացվել է՝ <span th:text="${classMaterial.getAddedAt()}"></span><br>
-                                Անվանում՝ <span th:text="${classMaterial.materialName}" style="font-weight: bold"></span><br>
-                            </p>
-                            <p class="more" style="font-weight: bold"><a th:href="@{'/user/dashboard/classMaterials/'+${classMaterial.id}+'/downloadAttachedFile'}">Բեռնել</a></p>
-                        </div>
-
-
+                    <div class="task materials" th:each="classMaterial:${userMaterials}">
+                        <p>
+                            Առարկա՝ <span
+                                th:text="${classMaterial.managersGroupsSubjects.subjectInfo.subjectName}"></span><br>
+                            Դասախոս՝ <span
+                                th:text="${classMaterial.managersGroupsSubjects.getUser().firstName+' '+classMaterial.managersGroupsSubjects.getUser().lastName+' '+classMaterial.managersGroupsSubjects.getUser().middleName}"></span><br>
+                            Ավելացվել է՝ <span th:text="${classMaterial.getAddedAt()}"></span><br>
+                            Անվանում՝ <span th:text="${classMaterial.materialName}"
+                                            style="font-weight: bold"></span><br>
+                        </p>
+                        <p class="more" style="font-weight: bold"><a
+                                th:href="@{'/user/dashboard/classMaterials/'+${classMaterial.id}+'/downloadAttachedFile'}">Բեռնել</a>
+                        </p>
+                    </div>
                 </div>
                 <div class="section_1_text" id="c">
                     <div class="task exam">

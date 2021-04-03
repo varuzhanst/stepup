@@ -56,13 +56,15 @@
                 </div>
 
                 <div class="section_1_text" id="a">
-
+                    <div th:if="${param.wrongGrade}">
+                        <div class="alert alert-danger">Գնահատականը սխալ է, փորձեք կրկին</div>
+                    </div>
                     <br>
                     <br>
-                    <h5>Խումբ՝<span th:text="*{group.groupNumber}"></span></h5>
-                    <h5>Առարկա՝<span th:text="*{subject.subjectName}"></span></h5>
+                    <h5>Խումբ՝ <span th:text="*{group.groupNumber}"></span></h5>
+                    <h5>Առարկա՝ <span th:text="*{subject.subjectName}"></span></h5>
                     <br>
-                    <h4>Ավելացված նյութեր</h4>
+                    <h4>Ավելացված հանձնարարություններ</h4>
                     <div th:if="${assignments.size()==0}">
                         Ավելացված հանձնարարություններ չկան
                     </div>
@@ -73,44 +75,75 @@
                             <th scope="col">Ավելացման ամսաթիվ</th>
                             <th scope="col">Վերջնաժամկետ</th>
                             <th scope="col">Նկարագրության ֆայլ</th>
-                            <th scope="col">Առավելագույն գնահատական</th>
+                            <th scope="col">Չի հանձնել</th>
+                            <th scope="col">Հանձնել է ժամանակին</th>
+                            <th scope="col">Հանձնել է ուշացումով</th>
+                            <th scope="col">Գնահատված</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
 
                         </tr>
-                        <tr th:each="assignment:${assignments}">
+                        <tr th:each="assignmentDto:${assignments}">
 
                             <td>
-                                    <span th:text="${assignment.assignmentName}">
-
-                                    </span>
-                            </td>
-                            <td>
-                                    <span th:text="${assignment.getAddedAtNormal()}">
+                                    <span th:text="${assignmentDto.assignment.assignmentName}">
 
                                     </span>
                             </td>
                             <td>
-                                    <span th:text="${assignment.getDeadlineNormal()}">
+                                    <span th:text="${assignmentDto.assignment.getAddedAtNormal()}">
 
                                     </span>
                             </td>
                             <td>
-                                <a th:href="@{'/manager/dashboard/assignment/'+${assignment.id}+'/downloadDescriptionFile'}">
-                                     <span th:text="${assignment.descriptionFile.fileName}">
+                                    <span th:text="${assignmentDto.assignment.getDeadlineNormal()}">
+
+                                    </span>
+                            </td>
+                            <td>
+                                <a th:href="@{'/manager/dashboard/assignments/'+${assignmentDto.assignment.id}+'/downloadDescriptionFile'}">
+                                     <span th:text="${assignmentDto.assignment.descriptionFile.fileName}">
                                     </span>
                                 </a>
                             </td>
                             <td>
-                                    <span th:text="${assignment.maxGrade}">
+                                    <span th:text="${assignmentDto.getCountOfNonTurnedInUsers()}" >
 
                                     </span>
+                                <a th:href="@{'/manager/dashboard/assignments/'+${assignmentDto.assignment.id}+'/nonTurnedInUsers'}" th:if="${assignmentDto.getCountOfNonTurnedInUsers()>0}">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </td>
+                            <td>
+                                    <span th:text="${assignmentDto.getCountOfTurnedInAssignments()}" style="color: darkgreen;font-weight: bold">
+
+                                    </span>
+                                <a th:href="@{'/manager/dashboard/assignments/'+${assignmentDto.assignment.id}+'/turnedInUsers'}" th:if="${assignmentDto.getCountOfTurnedInAssignments()>0}">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </td>
+                            <td>
+                                    <span th:text="${assignmentDto.getCountOfLateTurnedInUsers()}" style="color: darkred;font-weight: bold">
+
+                                    </span>
+                                <a th:href="@{'/manager/dashboard/assignments/'+${assignmentDto.assignment.id}+'/lateTurnedInUsers'}" th:if="${assignmentDto.getCountOfLateTurnedInUsers()>0}">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+
+                            </td>
+                            <td>
+                                    <span th:text="${assignmentDto.getCountOfReturnedAssignments()}" style="font-weight: bold">
+
+                                    </span>
+                                <a th:href="@{'/manager/dashboard/assignments/'+${assignmentDto.assignment.id}+'/returned'}" th:if="${assignmentDto.getCountOfReturnedAssignments()>0}">
+                                    <i class="fa fa-eye"></i>
+                                </a>
                             </td>
                             <td>
                                     <span>
-                                         <a th:href="@{'/manager/dashboard/assignments/'+${assignment.id}+'/remove'}">
+                                         <a th:href="@{'/manager/dashboard/assignments/'+${assignmentDto.assignment.id}+'/remove'}">
                                            Հեռացնել
                                          </a>
                                     </span>

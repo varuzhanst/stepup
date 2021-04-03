@@ -1,6 +1,9 @@
 package net.ddns.varuzhan.demo.model;
 
 
+import net.ddns.varuzhan.demo.service.prototype.AssignmentReturnedService;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,6 +11,7 @@ import java.util.Objects;
 
 @Entity
 public class Assignment implements Comparable{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -104,6 +108,6 @@ public class Assignment implements Comparable{
 
     @Override
     public int compareTo(Object o) {
-        return this.id-((Assignment)o).id;
+        return ((Assignment)o).getDeadline().compareTo(this.getDeadline());
     }
 }
