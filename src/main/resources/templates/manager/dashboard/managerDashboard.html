@@ -127,7 +127,41 @@
 
 
                 </div>
+                <div class="section_1_text" id="c">
+                    <br>
+                    <br>
+                    <br>
+                    <h4>Հասանելի խմբեր</h4>
+                    <br>
+                    <span th:if="${groupsOfManager.size()==0}">
+                                Ձեզ հասանելի խմբեր չկան
+                            </span>
+                    <table class="table" th:if="${groupsOfManager.size()>0}">
+                        <thead>
+                        <tr>
+                            <th scope="col">Խումբ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="group:${groupsOfManager}">
 
+                            <td>
+                                    <span th:text="${group.groupNumber}">
+
+                                    </span>
+                            </td>
+                            <td>
+                                    <span>
+                                         <a th:href="@{'/manager/dashboard/exams/groups/'+${group.getId()}+'/subjects'}" >
+                                            <i class="fa fa-external-link-square"></i>
+                                         </a>
+                                    </span>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
         </div>

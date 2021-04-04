@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StepUp</title>
+    <link rel="stylesheet" href="/static/css/styles_main.css">
+    <link rel="stylesheet" href="/static/library/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/library/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="all_project">
+    <header>
+        <div class="header_section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="logo">
+                            <a href="#">StepUp</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 offset-md-4">
+                        <div class="menu">
+                            <a class="menu_item" href="#" th:text="*{full_name}"> </a>
+                            <a class="menu_item btn_1" href="/logout">Ելք</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+
+    <main>
+        <div class="container">
+            <div class="main_section">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="section_1">
+                            <div class="func_btn button-1"><p>Հանձնարարություններ</p></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="section_2">
+                            <div class="func_btn button-2"><p>Ուսումնական նյութեր</p></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="section_3">
+                            <div class="func_btn button-3"><p>Քննություններ</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section_1_text" id="a">
+
+                </div>
+                <div class="section_1_text" id="b">
+
+                </div>
+                <div class="section_1_text" id="c">
+                    <br>
+                    <br>
+                    <h5>Խումբ՝<span th:text="*{group.groupNumber}"></span></h5>
+                    <h5>Առարկա՝<span th:text="*{subject.subjectName}"></span></h5>
+                    <br>
+                    <h4>Ավելացված քննություններ</h4>
+
+                    <p>
+                            <span th:if="${exams.size()==0}">
+                                Ավելացված քննություններ չկան
+                            </span>
+                    </p>
+                    <table class="table" th:if="${exams.size()>0}">
+                        <thead>
+                        <tr>
+                            <th scope="col">Քննության անվանում</th>
+                            <th scope="col">Ավելացման ամսաթիվ</th>
+                            <th scope="col">Կարգավիճակ</th>
+                            <th scope="col">Սկիզբ</th>
+                            <th scope="col">Տևողություն</th>
+                            <th scope="col">Հարցերի քանակ</th>
+                            <th scope="col">Առավելագույն գնահատական</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr  th:each="exam:${exams}">
+
+                            <td>
+                                    <span th:text="${exam.examName}">
+
+                                    </span>
+                            </td>
+                            <td>
+                                    <span th:text="${exam.addedAt}">
+
+                                    </span>
+                            </td>
+                            <td>
+                                    <span th:if="${exam.published}">
+                                        Տեսանելի
+                                    </span>
+                                    <span th:if="${!exam.published}">
+                                        Անտեսանելի
+                                    </span>
+                            </td>
+                            <td>
+                                <span th:text="${exam.startAt}">
+
+                                    </span>
+                            </td>
+                            <td>
+                                <span th:text="${exam.duration}">
+
+                                    </span>
+                            </td>
+                            <td>
+                                <span th:text="${exam.countOfQuestions}">
+
+                                    </span>
+                            </td>
+                            <td>
+                                <span th:text="${exam.maxGrade}">
+
+                                    </span>
+                            </td>
+                            <td>
+                                    <span>
+                                         <a th:href="@{'/manager/dashboard/exams/'+${exam.id}+'/remove'}">
+                                           Հեռացնել
+                                         </a>
+                                    </span>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <br>
+                    <h5>Նոր քննություն</h5>
+                    <form th:action="@{'/manager/dashboard/exams/groups/'+${group.getId()}+'/subjects/' +${subject.getId()}}" method="post" th:object="${newExam}"
+                          enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="control-label" for="examName">Քննության անվանում </label>
+                            <input id="examName" class="form-control" th:field="*{examName}" required
+                                   autofocus="autofocus"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="startAt">Քննության սկիզբը</label>
+                            <input type="datetime-local" class="form-control" name="startAt" id="startAt"
+                                   th:field="*{startAt}" required/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="duration">Տևողություն </label>
+                            <input id="duration" class="form-control" th:field="*{duration}" required
+                                   autofocus="autofocus"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="maxGrade">Առավելագույն գնահատական </label>
+                            <input id="maxGrade" class="form-control" th:field="*{maxGrade}" required
+                                   autofocus="autofocus"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="maxGrade">Հարցերի քանակ </label>
+                            <input id="questionsCount" class="form-control" th:field="*{questionsCount}" required
+                                   autofocus="autofocus"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="maxGrade">Տարբերակների քանակ </label>
+                            <input id="choicesCount" class="form-control" th:field="*{choicesCount}" required
+                                   autofocus="autofocus"/>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Ավելացնել</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+
+    <footer>
+        <div class="footer">
+            <p>© 2021 Բոլոր իրավունքները պաշտպանված են</p>
+        </div>
+    </footer>
+</div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/static/js/script.js"></script>
+</html>

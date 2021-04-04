@@ -19,6 +19,7 @@ public class AssignmentReturned implements Comparable{
     private LocalDateTime turnedInAt;
     private LocalDateTime returnedAt;
     private Integer actualGrade;
+    @Enumerated(EnumType.STRING)
     private AssignmentStatus status;
 
     public AssignmentReturned() {

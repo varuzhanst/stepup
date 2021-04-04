@@ -1,9 +1,6 @@
 package net.ddns.varuzhan.demo.model;
 
 
-import net.ddns.varuzhan.demo.service.prototype.AssignmentReturnedService;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
