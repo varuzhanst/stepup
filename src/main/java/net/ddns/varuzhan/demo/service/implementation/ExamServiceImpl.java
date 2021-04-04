@@ -8,7 +8,10 @@ import net.ddns.varuzhan.demo.repository.ExamRepository;
 import net.ddns.varuzhan.demo.service.prototype.ExamService;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class ExamServiceImpl implements ExamService {
@@ -46,6 +49,10 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public Set<Exam> examsOfGroup(GroupInfo groupInfo) {
-        return null;
+        HashSet<Exam> examsAll= new HashSet<>(examRepository.findAll());
+        return examsAll.stream()
+                .filter(exam -> exam.getPublished() && exam.getManagersGroupsSubjects().getGroupInfo().equals(groupInfo))
+                .collect(Collectors.toSet());
+
     }
 }

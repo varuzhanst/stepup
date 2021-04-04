@@ -1,25 +1,16 @@
 package net.ddns.varuzhan.demo.controller.manager.dashboard.exams;
 
-import net.ddns.varuzhan.demo.dto.ClassMaterialAdditionDto;
 import net.ddns.varuzhan.demo.dto.ExamAdditionDto;
-import net.ddns.varuzhan.demo.fileupload.FileUploadUtil;
+import net.ddns.varuzhan.demo.dto.ExamShowDto;
 import net.ddns.varuzhan.demo.model.*;
 import net.ddns.varuzhan.demo.service.prototype.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.FileVisitOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.TreeSet;
 
@@ -31,13 +22,15 @@ public class ExamsController {
     private final GroupInfoService groupInfoService;
     private final SubjectInfoService subjectInfoService;
     private final ExamService examService;
+    private final QuestionService questionService;
 
-    public ExamsController(ManagersGroupsSubjectsService managersGroupsSubjectsService, UserService userService, GroupInfoService groupInfoService, SubjectInfoService subjectInfoService, ExamService examService) {
+    public ExamsController(ManagersGroupsSubjectsService managersGroupsSubjectsService, UserService userService, GroupInfoService groupInfoService, SubjectInfoService subjectInfoService, ExamService examService, QuestionService questionService) {
         this.managersGroupsSubjectsService = managersGroupsSubjectsService;
         this.userService = userService;
         this.groupInfoService = groupInfoService;
         this.subjectInfoService = subjectInfoService;
         this.examService = examService;
+        this.questionService = questionService;
     }
 
     @GetMapping("/manager/dashboard/exams/groups/{groupId}/subjects")
@@ -82,17 +75,35 @@ public class ExamsController {
         if (managerGroupSubject == null) {
             return "redirect:/error";
         }
-        TreeSet<Exam> exams = new TreeSet<>(examService.examsOfManager(managerGroupSubject));
-
+        HashSet<Exam> exams = new HashSet<>(examService.examsOfManager(managerGroupSubject));
+        TreeSet<ExamShowDto> examShowDtos = new TreeSet<>();
+        for (Exam e : exams) {
+            ExamStatus status;
+            Integer countOfAddedQuestions = questionService.getQuestionsOfExam(e).size();
+            if (e.getStartAt().isAfter(LocalDateTime.now())) {
+                if (countOfAddedQuestions < e.getCountOfQuestions()) {
+                    status = ExamStatus.INSUFFICIENT_QUESTIONS;
+                } else if (countOfAddedQuestions >= e.getCountOfQuestions() && !e.getPublished())
+                    status = ExamStatus.READY_TO_BE_PUBLISHED;
+                else status = ExamStatus.WAITING_FOR_START;
+            } else if (e.getStartAt().plusMinutes(e.getDuration().longValue()).isAfter(LocalDateTime.now()) && e.getPublished()) {
+                status = ExamStatus.STARTED;
+            } else if (e.getStartAt().plusMinutes(e.getDuration().longValue()).isAfter(LocalDateTime.now()) && !e.getPublished()) {
+                status = ExamStatus.FAILED;
+            } else if (e.getStartAt().plusMinutes(e.getDuration().longValue()).isAfter(LocalDateTime.now()) && !e.getPublished()) {
+                status = ExamStatus.FAILED;
+            } else status = ExamStatus.FINISHED;
+            examShowDtos.add(new ExamShowDto(e,countOfAddedQuestions,status));
+        }
         model.addAttribute("group", groupInfoById);
         model.addAttribute("subject", subjectInfoById);
         model.addAttribute("newExam", new ExamAdditionDto());
-        model.addAttribute("exams", exams);
+        model.addAttribute("exams", examShowDtos);
         return "manager/dashboard/exams/examsView";
     }
 
     @PostMapping("/manager/dashboard/exams/groups/{groupId}/subjects/{subjectId}")
-    public String loadGroupsPage(Model model, @PathVariable String groupId, @PathVariable String subjectId, @ModelAttribute ExamAdditionDto examAdditionDto ) {
+    public String loadGroupsPage(Model model, @PathVariable String groupId, @PathVariable String subjectId, @ModelAttribute ExamAdditionDto examAdditionDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByEmail(authentication.getName());
         String fullName = user.getFirstName() + " " + user.getMiddleName() + " " + user.getLastName();
@@ -108,23 +119,22 @@ public class ExamsController {
         if (managerGroupSubject == null) {
             return "redirect:/error";
         }
-    try{
-        Exam exam = new Exam(
-                LocalDateTime.now(),
-                LocalDateTime.parse(examAdditionDto.getStartAt()),
-                Integer.parseInt(examAdditionDto.getDuration()),
-                Integer.parseInt(examAdditionDto.getMaxGrade()),
-                false,
-                managerGroupSubject,
-                examAdditionDto.getExamName(),
-                Integer.parseInt(examAdditionDto.getQuestionsCount()),
-                Integer.parseInt(examAdditionDto.getChoicesCount())
-        );
-        examService.save(exam);
-    } catch (Exception e){
-        return "redirect:/error";
-    }
-        return "redirect:/manager/dashboard/exams/"+groupId+"/subjects/"+ subjectId;
+        try {
+            Exam exam = new Exam(
+                    LocalDateTime.now(),
+                    LocalDateTime.parse(examAdditionDto.getStartAt()),
+                    Integer.parseInt(examAdditionDto.getDuration()),
+                    Integer.parseInt(examAdditionDto.getMaxGrade()),
+                    false,
+                    managerGroupSubject,
+                    examAdditionDto.getExamName(),
+                    Integer.parseInt(examAdditionDto.getQuestionsCount())
+            );
+            examService.save(exam);
+        } catch (Exception e) {
+            return "redirect:/error";
+        }
+        return "redirect:/manager/dashboard/exams/groups/" + groupId + "/subjects/" + subjectId;
     }
 
     @GetMapping("/manager/dashboard/exams/{examId}/remove")
@@ -134,9 +144,8 @@ public class ExamsController {
         Exam examById = examService.getExamById(examId);
         if (examById.getManagersGroupsSubjects().getUser().equals(userService.getUserById(manager.getId().toString()))) {
             examService.removeExam(examById);
-            return "redirect:/manager/dashboard/exams/groups/"+examById.getManagersGroupsSubjects().getGroupInfo().getId()+"/subjects/"+examById.getManagersGroupsSubjects().getSubjectInfo().getId();
+            return "redirect:/manager/dashboard/exams/groups/" + examById.getManagersGroupsSubjects().getGroupInfo().getId() + "/subjects/" + examById.getManagersGroupsSubjects().getSubjectInfo().getId();
 
-        }
-        else return "redirect:/error";
+        } else return "redirect:/error";
     }
 }

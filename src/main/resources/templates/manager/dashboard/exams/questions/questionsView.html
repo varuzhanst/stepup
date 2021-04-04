@@ -65,77 +65,64 @@
                 <div class="section_1_text" id="c">
                     <br>
                     <br>
-                    <h5>Խումբ՝<span th:text="*{group.groupNumber}"></span></h5>
-                    <h5>Առարկա՝<span th:text="*{subject.subjectName}"></span></h5>
+                    <h5>Խումբ՝<span th:text="*{exam.managersGroupsSubjects.groupInfo.groupNumber}"></span></h5>
+                    <h5>Առարկա՝<span th:text="*{exam.managersGroupsSubjects.subjectInfo.subjectName}"></span></h5>
+                    <h5>Քննության անվանում՝ <span th:text="*{exam.examName}"></span></h5>
                     <br>
-                    <h4>Ավելացված քննություններ</h4>
+                    <h4>Ավելացված հարցեր</h4>
 
                     <p>
-                            <span th:if="${exams.size()==0}">
-                                Ավելացված քննություններ չկան
+                            <span th:if="${questions.size()==0}">
+                                Ավելացված հարցեր չկան
                             </span>
                     </p>
-                    <table class="table" th:if="${exams.size()>0}">
+                    <table class="table" th:if="${questions.size()>0}">
                         <thead>
                         <tr>
-                            <th scope="col">Քննության անվանում</th>
-                            <th scope="col">Ավելացման ամսաթիվ</th>
-                            <th scope="col">Կարգավիճակ</th>
-                            <th scope="col">Սկիզբ</th>
-                            <th scope="col">Տևողություն</th>
-                            <th scope="col">Հարցերի քանակ</th>
-                            <th scope="col">Առավելագույն գնահատական</th>
-                            <th scope="col">Ավելացրած հարցերի քանակ</th>
+                            <th scope="col">Հարց</th>
+                            <th scope="col">Տարբերակ 1</th>
+                            <th scope="col">Տարբերակ 2</th>
+                            <th scope="col">Տարբերակ 3</th>
+                            <th scope="col">Տարբերակ 4</th>
+                            <th scope="col">ճիշտ տարբերակ</th>
                         </tr>
                         </thead>
                         <tbody>
 
-                        <tr  th:each="examDto:${exams}">
-
+                        <tr  th:each="question:${questions}">
                             <td>
-                                    <span th:text="${examDto.exam.examName}">
-
-                                    </span>
-                            </td>
-                            <td>
-                                    <span th:text="${examDto.exam.addedAt}">
+                                    <span th:text="${question.questionText}">
 
                                     </span>
                             </td>
                             <td>
-                                    <span th:text="${examDto.status.text}" style="font-weight: bold">
-                                    </span>
-                            </td>
-                            <td>
-                                <span th:text="${examDto.exam.startAt}">
+                                    <span th:text="${question.option1}">
 
                                     </span>
                             </td>
                             <td>
-                                <span th:text="${examDto.exam.duration}">
+                                    <span th:text="${question.option2}">
 
                                     </span>
                             </td>
                             <td>
-                                <span th:text="${examDto.exam.countOfQuestions}">
-                                    </span>
-                            </td>
-                            <td>
-                                <span th:text="${examDto.exam.maxGrade}">
+                                    <span th:text="${question.option3}">
 
                                     </span>
                             </td>
                             <td>
-                                <span th:text="${examDto.addedQuestionsCount}">
+                                    <span th:text="${question.option4}">
 
                                     </span>
-                                <a th:href="@{'/manager/dashboard/exams/'+${examDto.exam.id}+'/questions'}">
-                                    <i style='font-size:24px' class='far'>&#xf044;</i>
-                                </a>
+                            </td>
+                            <td>
+                                    <span th:text="${question.correctOption}">
+
+                                    </span>
                             </td>
                             <td>
                                     <span>
-                                         <a th:href="@{'/manager/dashboard/exams/'+${examDto.exam.id}+'/remove'}">
+                                         <a th:href="@{'/manager/dashboard/exams/'+${exam.id}+'/questions/'+${question.id}+'/remove'}">
                                            Հեռացնել
                                          </a>
                                     </span>
@@ -146,34 +133,27 @@
                     </table>
                     <br>
                     <br>
-                    <h5>Նոր քննություն</h5>
-                    <form th:action="@{'/manager/dashboard/exams/groups/'+${group.getId()}+'/subjects/' +${subject.getId()}}" method="post" th:object="${newExam}"
-                          enctype="multipart/form-data">
+                    <h5>Նոր հարց</h5>
+                    <form th:action="@{'/manager/dashboard/exams/'+${exam.id}+'/questions'}" method="post" th:object="${newQuestion}">
                         <div class="form-group">
-                            <label class="control-label" for="examName">Քննության անվանում </label>
-                            <input id="examName" class="form-control" th:field="*{examName}" required
+                            <label class="control-label" for="examName">Հարց </label>
+                            <input type="text" id="examName" class="form-control" th:field="*{questionText}" required
                                    autofocus="autofocus"/>
+
+                                <input type="radio" id="1" name="correct" value="1" required>
+                                <label for="1"><input required type="text" id="option1" class="form-control" th:field="*{option1}" /></label><br>
+
+                                <input type="radio" id="2" name="correct" value="2">
+                                <label for="1"><input required type="text" id="option2" class="form-control" th:field="*{option2}" /></label><br>
+
+                                <input type="radio" id="3" name="correct" value="3">
+                                <label for="1"><input type="text" id="option3" class="form-control" th:field="*{option3}" /></label><br>
+
+                                <input type="radio" id="4" name="correct" value="4">
+                                <label for="1"><input type="text" id="option4" class="form-control" th:field="*{option4}" /></label><br>
+
                         </div>
-                        <div class="form-group">
-                            <label class="control-label" for="startAt">Քննության սկիզբը</label>
-                            <input type="datetime-local" class="form-control" name="startAt" id="startAt"
-                                   th:field="*{startAt}" required/>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="duration">Տևողություն </label>
-                            <input id="duration" class="form-control" th:field="*{duration}" required
-                                   autofocus="autofocus"/>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="maxGrade">Առավելագույն գնահատական </label>
-                            <input id="maxGrade" class="form-control" th:field="*{maxGrade}" required
-                                   autofocus="autofocus"/>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="maxGrade">Հարցերի քանակ </label>
-                            <input id="questionsCount" class="form-control" th:field="*{questionsCount}" required
-                                   autofocus="autofocus"/>
-                        </div>
+
                         <div class="form-group">
                             <button type="submit" class="btn btn-success">Ավելացնել</button>
                         </div>

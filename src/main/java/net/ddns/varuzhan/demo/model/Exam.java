@@ -18,7 +18,6 @@ public class Exam implements Comparable {
     private ManagersGroupsSubjects managersGroupsSubjects;
     private String examName;
     private Integer countOfQuestions;
-    private Integer countOfChoices;
 
     public Exam() {
     }
@@ -108,20 +107,13 @@ public class Exam implements Comparable {
         this.countOfQuestions = countOfQuestions;
     }
 
-    public Integer getCountOfChoices() {
-        return countOfChoices;
-    }
-
-    public void setCountOfChoices(Integer countOfChoices) {
-        this.countOfChoices = countOfChoices;
-    }
 
     @Override
     public int compareTo(Object o) {
         return this.id - ((Exam) o).getId();
     }
 
-    public Exam(LocalDateTime addedAt, LocalDateTime startAt, Integer duration, Integer maxGrade, Boolean published, ManagersGroupsSubjects managersGroupsSubjects, String examName, Integer countOfQuestions, Integer countOfChoices) {
+    public Exam(LocalDateTime addedAt, LocalDateTime startAt, Integer duration, Integer maxGrade, Boolean published, ManagersGroupsSubjects managersGroupsSubjects, String examName, Integer countOfQuestions) {
         this.addedAt = addedAt;
         this.startAt = startAt;
         this.duration = duration;
@@ -130,6 +122,5 @@ public class Exam implements Comparable {
         this.managersGroupsSubjects = managersGroupsSubjects;
         this.examName = examName;
         this.countOfQuestions = countOfQuestions;
-        this.countOfChoices = countOfChoices;
     }
 }

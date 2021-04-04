@@ -6,7 +6,6 @@ public class ExamAdditionDto {
     private String maxGrade;
     private String duration;
     private String questionsCount;
-    private String choicesCount;
 
     public ExamAdditionDto() {
     }
@@ -51,11 +50,5 @@ public class ExamAdditionDto {
         this.questionsCount = questionsCount;
     }
 
-    public String getChoicesCount() {
-        return choicesCount;
-    }
 
-    public void setChoicesCount(String choicesCount) {
-        this.choicesCount = choicesCount;
-    }
 }

@@ -211,14 +211,13 @@
                     </div>
                 </div>
                 <div class="section_1_text" id="c">
-                    <div class="task exam">
+                    <div class="task exam" th:each="exam:${userExams}">
                         <p>
-                            <img src="../static/img/books-stack-of-three.png" width="30px"> Առարկա՝
-                            Կիբեռանվտանգություն<br>
-                            <img src="../static/img/teacher.png" width="30px"> Դասախոս՝ Մ․ Անտոնյան<br>
-                            <img src="../static/img/clock-time.png" width="30px"> Սկիզբ՝ 10։00
+                            Առարկա՝ <span th:text="${exam.examName}"></span><br>
+                            Դասախոս՝ <span th:text="${exam.managersGroupsSubjects.user.firstName + ' ' + exam.managersGroupsSubjects.user.lastName +' ' + exam.managersGroupsSubjects.user.middleName}"></span><br>
+                            Սկիզբ՝ <span th:text="${exam.startAt}"></span><br>
+                            Տևողություն <span th:text="${exam.duration}"></span><br>
                         </p>
-                        <p class="more"><a href="#">Ավելին>></a></p>
                     </div>
 
                 </div>
