@@ -106,4 +106,10 @@ public class Question {
     public int hashCode() {
         return Objects.hash(id);
     }
+    public Boolean isOption3Visible(){
+        return option3==null;
+    }
+    public Boolean isOption4Visible(){
+        return option4==null;
+    }
 }

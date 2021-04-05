@@ -6,7 +6,7 @@ import net.ddns.varuzhan.demo.repository.QuestionRepository;
 import net.ddns.varuzhan.demo.service.prototype.QuestionService;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class QuestionServiceImpl implements QuestionService {
@@ -29,5 +29,18 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void remove(Question question) {
         questionRepository.delete(question);
+    }
+
+    @Override
+    public HashSet<Question> getQuestionsForExamAttempt(Exam exam) {
+        Random random = new Random();
+        List<Question> allQuestions = new ArrayList<>(questionRepository.findQuestionsByExam(exam));
+        HashSet<Question> examQuestions = new HashSet<>();
+        for (int i = 0; i < exam.getCountOfQuestions(); i++) {
+            int randomId = random.nextInt(allQuestions.size());
+            examQuestions.add(allQuestions.get(randomId));
+            allQuestions.remove(randomId);
+        }
+        return examQuestions;
     }
 }

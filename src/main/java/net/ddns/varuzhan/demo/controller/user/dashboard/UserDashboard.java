@@ -28,8 +28,9 @@ public class UserDashboard {
     private final SubjectInfoService subjectInfoService;
     private final AssignmentReturnedService assignmentReturnedService;
     private final ExamService examService;
+    private final ExamAttemptService examAttemptService;
 
-    public UserDashboard(UserService userService, UserGroupInfoService userGroupInfoService, ManagersGroupsSubjectsService managersGroupsSubjectsService, ClassMaterialService classMaterialService, AssignmentService assignmentService, SubjectInfoService subjectInfoService, AssignmentReturnedService assignmentReturnedService, ExamService examService) {
+    public UserDashboard(UserService userService, UserGroupInfoService userGroupInfoService, ManagersGroupsSubjectsService managersGroupsSubjectsService, ClassMaterialService classMaterialService, AssignmentService assignmentService, SubjectInfoService subjectInfoService, AssignmentReturnedService assignmentReturnedService, ExamService examService, ExamAttemptService examAttemptService) {
         this.userService = userService;
         this.userGroupInfoService = userGroupInfoService;
         this.managersGroupsSubjectsService = managersGroupsSubjectsService;
@@ -38,11 +39,13 @@ public class UserDashboard {
         this.subjectInfoService = subjectInfoService;
         this.assignmentReturnedService = assignmentReturnedService;
         this.examService = examService;
+        this.examAttemptService = examAttemptService;
     }
 
     @RequestMapping("/user/dashboard")
     public String loadUserDashboard(Model model, @ModelAttribute("selectedSubject") SubjectsFilterDto subjectsFilterDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUserByEmail(authentication.getName());
         String fullName = userService.getUserByEmail(authentication.getName()).getFirstName()
                 + " " + userService.getUserByEmail(authentication.getName()).getMiddleName()
                 + " " + userService.getUserByEmail(authentication.getName()).getLastName();
@@ -58,11 +61,39 @@ public class UserDashboard {
         Set<AssignmentReturned> lateTurnedInAssignments = new TreeSet<>();
         Set<AssignmentReturned> turnedInAssignments = new TreeSet<>();
         Set<AssignmentReturned> returnedAssignments = new TreeSet<>();
+
+        Set<Exam> examsInWaitingStatus = new TreeSet<>();
+        Set<Exam> examsInStartedStatus = new TreeSet<>();
+        Set<Exam> examsFailed = new TreeSet<>();
+        Set<ExamAttempt> examsFinished = new TreeSet<>();
+
+
         for (ManagersGroupsSubjects x : userAvailableManagersSubjects) {
             userAvailableExams = new TreeSet<>(examService.examsOfGroup(x.getGroupInfo())
                     .stream()
                     .filter(Exam::getPublished)
                     .collect(Collectors.toSet()));
+            examsInWaitingStatus = userAvailableExams
+                    .stream()
+                    .filter(e -> e.getStartAt().isAfter(LocalDateTime.now()))
+                    .collect(Collectors.toSet());
+            examsInStartedStatus = userAvailableExams
+                    .stream()
+                    .filter(e -> (examAttemptService.getAttemptByUserAndExam(user, e) == null && e.getStartAt().plusMinutes(e.getDuration().longValue()).isAfter(LocalDateTime.now()) && e.getStartAt().isBefore(LocalDateTime.now())))
+                    .collect(Collectors.toSet());
+            examsFailed = userAvailableExams
+                    .stream()
+                    .filter(e -> (examAttemptService.getAttemptByUserAndExam(user, e) != null && (examAttemptService.getAttemptByUserAndExam(user, e).getGrade() == null)))
+                    .collect(Collectors.toSet());
+            examsFailed.addAll(userAvailableExams
+                    .stream()
+                    .filter(e -> (examAttemptService.getAttemptByUserAndExam(user, e) == null && e.getStartAt().plusMinutes(e.getDuration().longValue()).isBefore(LocalDateTime.now())))
+                    .collect(Collectors.toSet()));
+            examsFinished = userAvailableExams
+                    .stream()
+                    .filter(e -> (examAttemptService.getAttemptByUserAndExam(user, e) != null && examAttemptService.getAttemptByUserAndExam(user, e).getGrade() != null))
+                    .map(e -> examAttemptService.getAttemptByUserAndExam(user, e))
+                    .collect(Collectors.toSet());
 
             Set<ClassMaterial> setOfMaterials = classMaterialService.getMaterialsByManagerGroupSubject(x);
             userClassMaterials.addAll(setOfMaterials);
@@ -98,7 +129,11 @@ public class UserDashboard {
         model.addAttribute("turnedInAssignments", turnedInAssignments);
         model.addAttribute("lateTurnedInAssignments", lateTurnedInAssignments);
         model.addAttribute("returnedAssignments", returnedAssignments);
-        model.addAttribute("userExams",userAvailableExams);
+        model.addAttribute("examsWaiting", examsInWaitingStatus);
+        model.addAttribute("examsStarted", examsInStartedStatus);
+        model.addAttribute("examsFailed", examsFailed);
+        model.addAttribute("examsFinished", examsFinished);
+
 
         if (subjectsFilterDto.getSubjectId() == null || subjectsFilterDto.getSubjectId().equals("-1")) {
             subjectsFilterDto.setSubjectId("-1");

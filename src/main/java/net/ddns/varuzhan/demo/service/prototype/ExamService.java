@@ -15,4 +15,5 @@ public interface ExamService {
     void removeExam(Exam exam);
     Set<Exam> examsOfManager(ManagersGroupsSubjects managersGroupsSubjects);
     Set<Exam> examsOfGroup(GroupInfo groupInfo);
+
 }

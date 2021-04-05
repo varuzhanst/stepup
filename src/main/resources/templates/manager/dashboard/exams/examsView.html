@@ -90,7 +90,7 @@
                         </thead>
                         <tbody>
 
-                        <tr  th:each="examDto:${exams}">
+                        <tr th:each="examDto:${exams}">
 
                             <td>
                                     <span th:text="${examDto.exam.examName}">
@@ -98,12 +98,38 @@
                                     </span>
                             </td>
                             <td>
+
                                     <span th:text="${examDto.exam.addedAt}">
 
                                     </span>
                             </td>
-                            <td>
-                                    <span th:text="${examDto.status.text}" style="font-weight: bold">
+                            <td>    <span th:if="${examDto.status.number==1}"><span><i
+                                    class="fa fa-eye-slash"></i></span>
+                                    <span th:text="${examDto.status.text}" style="font-size: 11px;font-style: italic">
+                                    </span></span>
+                                <span th:if="${examDto.status.number==2}"><span><a
+                                        th:href="@{'/manager/dashboard/exams/'+${examDto.exam.id}+'/changePublishStatus'}"><i
+                                        class="fa fa-eye-slash"></i></a></span>
+                                    <span th:text="${examDto.status.text}" style="font-size: 11px;font-style: italic">
+                                    </span></span>
+                                <span th:if="${examDto.status.number==3}"><span><a
+                                        th:href="@{'/manager/dashboard/exams/'+${examDto.exam.id}+'/changePublishStatus'}"><i
+                                        class="fa fa-eye"></i></a></span>
+                                    <span th:text="${examDto.status.text}" style="font-size:11px;font-style: italic">
+                                    </span></span>
+                                <span th:if="${examDto.status.number==4}">
+                                    <span th:text="${examDto.status.text}" style="font-size: 11px">
+                                    </span></span>
+                                <span th:if="${examDto.status.number==5}">
+                                    <span th:text="${examDto.status.text}" style="font-size: 11px">
+                                    </span></span>
+                                <span th:if="${examDto.status.number==6}"><span>
+                                    <a
+                                            th:href="@{'/manager/dashboard/exams/'+${examDto.exam.id}+'/results'}"><i
+                                            class="fa fa-users"></i></a>
+                                    <span th:text="${examDto.status.text}" style="font-size: 11px; font-weight: bold">
+                                    </span>
+                                </span>
                                     </span>
                             </td>
                             <td>
@@ -130,7 +156,7 @@
 
                                     </span>
                                 <a th:href="@{'/manager/dashboard/exams/'+${examDto.exam.id}+'/questions'}">
-                                    <i style='font-size:24px' class='far'>&#xf044;</i>
+                                    <i class="fa fa-edit"></i>
                                 </a>
                             </td>
                             <td>
@@ -147,7 +173,8 @@
                     <br>
                     <br>
                     <h5>Նոր քննություն</h5>
-                    <form th:action="@{'/manager/dashboard/exams/groups/'+${group.getId()}+'/subjects/' +${subject.getId()}}" method="post" th:object="${newExam}"
+                    <form th:action="@{'/manager/dashboard/exams/groups/'+${group.getId()}+'/subjects/' +${subject.getId()}}"
+                          method="post" th:object="${newExam}"
                           enctype="multipart/form-data">
                         <div class="form-group">
                             <label class="control-label" for="examName">Քննության անվանում </label>

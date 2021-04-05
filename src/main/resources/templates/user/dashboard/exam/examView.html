@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StepUp</title>
+    <link rel="stylesheet" href="/static/css/styles_main.css">
+    <link rel="stylesheet" href="/static/library/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/library/bootstrap-grid.min.css">
+</head>
+<body>
+<div class="all_project">
+    <header>
+        <div class="header_section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="logo">
+                            <a href="#">StepUp</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 offset-md-4">
+                        <div class="menu">
+                            <a class="menu_item" href="/user/dashboard" th:text="*{full_name}"> </a>
+                            <a class="menu_item btn_1" href="/logout">Ելք</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+
+    <main>
+        <div class="container">
+            <div class="main_section">
+                <div class="row">
+
+
+                </div>
+                <br>
+                <h5>Հարց <span th:text="${question.realNumber}"></span></h5>
+
+
+                <div>
+                    <h3 th:text="${question.question.questionText}"></h3>
+
+                </div>
+                <form th:action="@{'/user/dashboard/exams/'+${examId}+'/attempt/questions/'+${question.realNumber}}" method="post" th:object="${question}">
+                    <div class="form-group">
+                        <input type="radio" id="1" name="correct" value="1" th:field="${question.selectedAnswer}"> <label for="1"><span th:text="${question.question.option1}"></span></label><br>
+                        <input type="radio" id="2" name="correct" value="2" th:field="${question.selectedAnswer}"> <label for="2"><span th:text="${question.question.option2}"></span></label><br>
+                        <input th:if="${question.question.isOption3Visible()}" type="radio" id="3" name="correct" value="3" th:field="${question.selectedAnswer}"> <label th:if="${question.question.isOption3Visible()}" for="3"><span th:text="${question.question.option3}"></span></label><br>
+                        <input th:if="${question.question.isOption4Visible()}" type="radio" id="4" name="correct" value="4"th:field="${question.selectedAnswer}"> <label th:if="${question.question.isOption4Visible()}" for="4"><span th:text="${question.question.option4}"></span></label><br>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Պատասխանել</button>
+                    </div>
+                </form>
+                <br>
+                <a th:href="@{'/user/dashboard/exams/'+${examId}+'/attempt/questions/'+${question.realNumber}+'/previous'}" th:if="*{previousButton}"><button>Հետ</button></a>
+                <span>     </span>
+                <a th:href="@{'/user/dashboard/exams/'+${examId}+'/attempt/questions/'+${question.realNumber}+'/next'}" th:if="*{nextButton}"><button>Առաջ</button></a>
+                <br>
+                <a th:href="@{'/user/dashboard/exams/'+${examId}+'/attempt/finish'}" th:if="*{finishButton}"><button>Ավարտել</button></a>
+            </div>
+        </div>
+    </main>
+
+
+    <footer>
+        <div class="footer">
+            <p>© 2021 Բոլոր իրավունքները պաշտպանված են</p>
+        </div>
+    </footer>
+</div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/static/js/script.js"></script>
+</html>

@@ -52,7 +52,9 @@
                     </div>
                     <div class="col-md-4">
                         <div class="section_3">
-                            <div class="func_btn button-3"><p>Քննություններ <span class="count">0</span></p></div>
+                            <div class="func_btn button-3"><p>Քննություններ  <span class="count"
+                                                                                   th:text="${examsStarted.size()+examsWaiting.size()}"
+                                                                                   style="font-weight: bold"></span></p></div>
                         </div>
                     </div>
                 </div>
@@ -211,15 +213,41 @@
                     </div>
                 </div>
                 <div class="section_1_text" id="c">
-                    <div class="task exam" th:each="exam:${userExams}">
+                    <div class="task exam" th:each="exam:${examsStarted}">
                         <p>
                             Առարկա՝ <span th:text="${exam.examName}"></span><br>
                             Դասախոս՝ <span th:text="${exam.managersGroupsSubjects.user.firstName + ' ' + exam.managersGroupsSubjects.user.lastName +' ' + exam.managersGroupsSubjects.user.middleName}"></span><br>
                             Սկիզբ՝ <span th:text="${exam.startAt}"></span><br>
-                            Տևողություն <span th:text="${exam.duration}"></span><br>
+                            Տևողություն` <span th:text="${exam.duration}"></span> րոպե<br>
+                           <a th:href="@{'/user/dashboard/exams/'+${exam.id}+'/attempt'}" > <button> Սկսել </button></a>
+                        </p>
+                    </div>
+                    <div class="task exam" th:each="exam:${examsWaiting}">
+                        <p>
+                            Առարկա՝ <span th:text="${exam.examName}"></span><br>
+                            Դասախոս՝ <span th:text="${exam.managersGroupsSubjects.user.firstName + ' ' + exam.managersGroupsSubjects.user.lastName +' ' + exam.managersGroupsSubjects.user.middleName}"></span><br>
+                            Սկիզբ՝ <span th:text="${exam.startAt}"></span><br>
+                            Տևողություն` <span th:text="${exam.duration}"></span> րոպե<br>
+                            Կարգավիճակ՝ Սպասվում է
+                        </p>
+                    </div>
+                    <div class="task exam" th:each="examAttempt:${examsFinished}">
+                        <p>
+                            Առարկա՝ <span th:text="${examAttempt.exam.examName}"></span><br>
+                            Դասախոս՝ <span th:text="${examAttempt.exam.managersGroupsSubjects.user.firstName + ' ' + examAttempt.exam.managersGroupsSubjects.user.lastName +' ' + examAttempt.exam.managersGroupsSubjects.user.middleName}"></span><br>
+                            Սկիզբ՝ <span th:text="${examAttempt.exam.startAt}"></span><br>
+                            Գնահատական` <span th:text="${examAttempt.grade}"></span><br>
                         </p>
                     </div>
 
+                    <div class="task exam" th:each="exam:${examsFailed}" style="background-color: indianred">
+                        <p>
+                            Առարկա՝ <span th:text="${exam.examName}"></span><br>
+                            Դասախոս՝ <span th:text="${exam.managersGroupsSubjects.user.firstName + ' ' + exam.managersGroupsSubjects.user.lastName +' ' + exam.managersGroupsSubjects.user.middleName}"></span><br>
+                            Սկիզբ՝ <span th:text="${exam.startAt}"></span><br>
+                            Կարգավիճակ` Ձախողված
+                        </p>
+                    </div>
                 </div>
 
 
