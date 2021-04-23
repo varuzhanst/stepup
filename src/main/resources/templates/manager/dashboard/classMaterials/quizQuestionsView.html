@@ -59,15 +59,13 @@
                 <div class="section_1_text" id="a">
 
                 </div>
-                <div class="section_1_text" id="b">
+                <div class="section_1_text" id="c">
 
                 </div>
-                <div class="section_1_text" id="c">
+                <div class="section_1_text" id="b">
                     <br>
                     <br>
-                    <h5>Խումբ՝<span th:text="*{exam.managersGroupsSubjects.groupInfo.groupNumber}"></span></h5>
-                    <h5>Առարկա՝<span th:text="*{exam.managersGroupsSubjects.subjectInfo.subjectName}"></span></h5>
-                    <h5>Քննության անվանում՝ <span th:text="*{exam.examName}"></span></h5>
+                    <h5>Նյութի անվանում՝ <span th:text="*{classMaterial.materialName}"></span></h5>
                     <br>
                     <h4>Ավելացված հարցեր</h4>
 
@@ -85,6 +83,7 @@
                             <th scope="col">Տարբերակ 3</th>
                             <th scope="col">Տարբերակ 4</th>
                             <th scope="col">ճիշտ տարբերակ</th>
+                            <th scope="col">Նշումներ</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -96,22 +95,22 @@
                                     </span>
                             </td>
                             <td>
-                                    <span th:text="${question.option1}">
+                                    <span th:text="${question.option1text}">
 
                                     </span>
                             </td>
                             <td>
-                                    <span th:text="${question.option2}">
+                                    <span th:text="${question.option2text}">
 
                                     </span>
                             </td>
                             <td>
-                                    <span th:text="${question.option3}">
+                                    <span th:text="${question.option3text}">
 
                                     </span>
                             </td>
                             <td>
-                                    <span th:text="${question.option4}">
+                                    <span th:text="${question.option4text}">
 
                                     </span>
                             </td>
@@ -121,8 +120,13 @@
                                     </span>
                             </td>
                             <td>
+                                    <span th:text="${question.notes}">
+
+                                    </span>
+                            </td>
+                            <td>
                                     <span>
-                                         <a th:href="@{'/manager/dashboard/exams/'+${exam.id}+'/questions/'+${question.id}+'/remove'}">
+                                         <a th:href="@{'/manager/dashboard/classMaterials/'+${classMaterial.id}+'/questions/'+${question.id}+'/remove'}">
                                            Հեռացնել
                                          </a>
                                     </span>
@@ -134,10 +138,10 @@
                     <br>
                     <br>
                     <h5>Նոր հարց</h5>
-                    <form th:action="@{'/manager/dashboard/exams/'+${exam.id}+'/questions'}" method="post" th:object="${newQuestion}">
+                    <form th:action="@{'/manager/dashboard/classMaterials/'+${classMaterial.id}+'/questions'}" method="post" th:object="${newQuestion}">
                         <div class="form-group">
-                            <label class="control-label" for="examName">Հարց </label>
-                            <input type="text" id="examName" class="form-control" th:field="*{questionText}" required
+                            <label class="control-label" for="question">Հարց </label>
+                            <input type="text" id="question" class="form-control" th:field="*{questionText}" required
                                    autofocus="autofocus"/>
 
                                 <input type="radio" id="1" name="correct" value="1" required>
@@ -151,7 +155,9 @@
 
                                 <input type="radio" id="4" name="correct" value="4">
                                 <label for="1"><input type="text" id="option4" class="form-control" th:field="*{option4}" /></label><br>
-
+                            <label class="control-label" for="notes">Նշումներ ուսանողի համար </label>
+                            <input type="text" id="notes" class="form-control" th:field="*{notes}" required
+                                   autofocus="autofocus"/>
                         </div>
 
                         <div class="form-group">

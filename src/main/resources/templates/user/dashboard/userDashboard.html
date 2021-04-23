@@ -197,18 +197,18 @@
                         </div>
                     </form>
                     <br>
-                    <div class="task materials" th:each="classMaterial:${userMaterials}">
+                    <div class="task materials" th:each="material:${userMaterials}">
                         <p>
                             Առարկա՝ <span
-                                th:text="${classMaterial.managersGroupsSubjects.subjectInfo.subjectName}"></span><br>
+                                th:text="${material.managersGroupsSubjects.subjectInfo.subjectName}"></span><br>
                             Դասախոս՝ <span
-                                th:text="${classMaterial.managersGroupsSubjects.getUser().firstName+' '+classMaterial.managersGroupsSubjects.getUser().lastName+' '+classMaterial.managersGroupsSubjects.getUser().middleName}"></span><br>
-                            Ավելացվել է՝ <span th:text="${classMaterial.getAddedAt()}"></span><br>
-                            Անվանում՝ <span th:text="${classMaterial.materialName}"
+                                th:text="${material.managersGroupsSubjects.getUser().firstName+' '+material.managersGroupsSubjects.getUser().lastName+' '+material.managersGroupsSubjects.getUser().middleName}"></span><br>
+                            Ավելացվել է՝ <span th:text="${material.getAddedAt()}"></span><br>
+                            Անվանում՝ <span th:text="${material.materialName}"
                                             style="font-weight: bold"></span><br>
                         </p>
                         <p class="more" style="font-weight: bold"><a
-                                th:href="@{'/user/dashboard/classMaterials/'+${classMaterial.id}+'/downloadAttachedFile'}">Բեռնել</a>
+                                th:href="@{'/user/dashboard/classMaterials/'+${material.id}+'/downloadAttachedFile'}">Բեռնել</a>
                         </p>
                     </div>
                 </div>

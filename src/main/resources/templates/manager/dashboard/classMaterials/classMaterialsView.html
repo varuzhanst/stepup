@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col-md-2">
                         <div class="logo">
-                            <a href="#">StepUp</a>
+                            <a href="/">StepUp</a>
                         </div>
                     </div>
                     <div class="col-md-6 offset-md-4">
@@ -71,36 +71,48 @@
                             <th scope="col">Նյութի անվանում</th>
                             <th scope="col">Ավելացման ամսաթիվ</th>
                             <th scope="col">Կցված ֆայլ</th>
+                            <th scope="col">Ավելացված հարցերի քանակ</th>
+
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <span th:if="${classMaterials.size()==0}">
+                            <span th:if="${classMaterialsAndQuestions.size()==0}">
                                 Ավելացված ուսումնական նյութեր չկան
                             </span>
                         </tr>
-                        <tr th:if="${classMaterials.size()>0}" th:each="material:${classMaterials}">
+                        <tr th:if="${classMaterialsAndQuestions.size()>0}" th:each="materialAndQuestionsCount:${classMaterialsAndQuestions}">
 
                             <td>
-                                    <span th:text="${material.getMaterialName()}">
-
-                                    </span>
-                            </td>
-                            <td>
-                                    <span th:text="${material.getAddedAt()}">
+                                    <span th:text="${materialAndQuestionsCount.material.materialName}">
 
                                     </span>
                             </td>
                             <td>
-                                <a th:href="@{'/manager/dashboard/classMaterials/'+${material.id}+'/downloadAttachedFile'}">
-                                     <span th:text="${material.getFile().getFileName()}">
+                                    <span th:text="${materialAndQuestionsCount.material.getAddedAt()}">
+
+                                    </span>
+                            </td>
+                            <td>
+                                <a th:href="@{'/manager/dashboard/classMaterials/'+${materialAndQuestionsCount.material.id}+'/downloadAttachedFile'}">
+                                     <span th:text="${materialAndQuestionsCount.material.getFile().getFileName()}">
                                     </span>
                                 </a>
                             </td>
                             <td>
+                                    <span th:text="${materialAndQuestionsCount.countOfQuestions}">
+
+                                    </span>
+                                <span>
+                                   <a th:href="@{'/manager/dashboard/classMaterials/'+${materialAndQuestionsCount.material.id}+'/questions'}">
+                                    <i class="fa fa-edit"></i>
+                                   </a>
+                               </span>
+                            </td>
+                            <td>
                                     <span>
-                                         <a th:href="@{'/manager/dashboard/classMaterials/'+${material.id}+'/remove'}">
-                                           Հեռացնել
+                                         <a th:href="@{'/manager/dashboard/classMaterials/'+${materialAndQuestionsCount.material.id}+'/remove'}">
+                                           <i class="fa fa-minus"></i>
                                          </a>
                                     </span>
 

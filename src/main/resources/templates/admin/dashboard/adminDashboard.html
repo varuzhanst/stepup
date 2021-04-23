@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>StepUp</title>
-    <link rel="stylesheet" href="../static/css/styles_main.css">
-    <link rel="stylesheet" href="../static/library/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/library/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="/static/css/styles_main.css">
+    <link rel="stylesheet" href="/static/library/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/library/bootstrap-grid.min.css">
 </head>
 <body>
 <div class="all_project">
@@ -66,6 +66,9 @@
                     <div th:if="${param.groupAdditionSuccess}">
                         <div class="alert alert-info">Խումբը հաջողությամբ ավելացվել է</div>
                     </div>
+                    <div th:if="${param.subjectAdditionSuccess}">
+                        <div class="alert alert-info">Առարկան հաջողությամբ ավելացվել է</div>
+                    </div>
                     <br>
                     <br>
                     <table class="table">
@@ -84,19 +87,28 @@
                             </td>
                             <td>
                                 <span th:text="${group.getUsersCount()}"></span>
-                                <a th:href="@{'/admin/dashboard/groups/'+${group.getGroupInfo().getId()}+'/users'}">
-                                    <i class='fas fa-pen'></i>
-                                </a>
+                               <span> <a th:href="@{'/admin/dashboard/groups/'+${group.getGroupInfo().getId()}+'/users'}">
+                                    <i class="fa fa-edit"></i>
+                                </a></span>
                             </td>
                             <td><span th:text="${group.getManagersCount()}"></span>
-                                <a th:href="@{'/admin/dashboard/groups/'+${group.getGroupInfo().getId()}+'/managers'}">
-                                    <i class='fas fa-pen'></i>
-                                </a>
+                               <span>
+                                   <a th:href="@{'/admin/dashboard/groups/'+${group.getGroupInfo().getId()}+'/managers'}">
+                                    <i class="fa fa-edit"></i>
+                                   </a>
+                               </span>
                             </td>
 
 
                         </tr>
+
+                        <tr th:if="${groups.size()==0}">
+                            <td>
+                                <span>Ավելացված խմբեր չկան</span>
+                            </td>
+                        </tr>
                         </tbody>
+
                     </table>
                     <form th:action="@{/admin/dashboard/groups/new}" method="post" th:object="${newGroup}">
                         <div class="form-group">
@@ -120,6 +132,11 @@
                         <tr th:each="subject:${subjects}">
                             <td>
                                 <span th:text="${subject.subjectName}"></span>
+                            </td>
+                        </tr>
+                        <tr th:if="${subjects.size()==0}">
+                            <td>
+                                <span>Ավելացված առարկաներ չկան</span>
                             </td>
                         </tr>
                         </tbody>
