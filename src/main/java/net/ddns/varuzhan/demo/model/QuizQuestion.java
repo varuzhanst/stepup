@@ -1,7 +1,10 @@
 package net.ddns.varuzhan.demo.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public class QuizQuestion implements Comparable{
@@ -11,6 +14,7 @@ public class QuizQuestion implements Comparable{
     @ManyToOne
     private ClassMaterial classMaterial;
     private String questionText;
+    private String questionToken;
 
     public String getQuestionText() {
         return questionText;
@@ -94,6 +98,14 @@ public class QuizQuestion implements Comparable{
         this.notes = notes;
     }
 
+    public String getQuestionToken() {
+        return questionToken;
+    }
+
+    public void setQuestionToken(String questionToken) {
+        this.questionToken = questionToken;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -108,10 +120,10 @@ public class QuizQuestion implements Comparable{
     }
 
     public Boolean isOption3Visible(){
-        return option3text==null;
+        return option3text!=null;
     }
     public Boolean isOption4Visible(){
-        return option4text==null;
+        return option4text!=null;
     }
 
     @Override

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StepUp</title>
+    <link rel="stylesheet" href="/static/css/styles_main.css">
+    <link rel="stylesheet" href="/static/library/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/library/bootstrap-grid.min.css">
+</head>
+<body>
+<div class="all_project">
+    <header>
+        <div class="header_section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="logo">
+                            <a href="/user/dashboard">StepUp</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 offset-md-4">
+                        <div class="menu">
+                            <a class="menu_item" href="/user/dashboard" th:text="*{full_name}"> </a>
+                            <a class="menu_item btn_1" href="/logout">Ելք</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+
+    <main>
+        <div class="container">
+            <div class="main_section">
+                <div class="row">
+
+
+                </div>
+                <h4>Նյութի անվանումը՝ <span th:text="${material.materialName}"></span></h4>
+                <br><br>
+                <h5><span th:text="${question.questionText}"></span></h5>
+
+
+                <form th:action="@{'/user/dashboard/classMaterials/'+${material.id}+'/quiz'}" method="post" th:object="${quizAnswer}">
+                    <div class="form-group">
+                        <input type="radio" id="1" name="correct" value="1" th:field="${quizAnswer.selectedOption}"> <label for="1"><span th:text="${question.option1text}"></span></label><br>
+                        <input type="radio" id="2" name="correct" value="2" th:field="${quizAnswer.selectedOption}"> <label for="2"><span th:text="${question.option2text}"></span></label><br>
+                        <input th:if="${question.isOption3Visible()}" type="radio" id="3" name="correct" value="3" th:field="${quizAnswer.selectedOption}"> <label th:if="${question.isOption3Visible()}" for="3"><span th:text="${question.option3text}"></span></label><br>
+                        <input th:if="${question.isOption4Visible()}" type="radio" id="4" name="correct" value="4"th:field="${quizAnswer.selectedOption}"> <label th:if="${question.isOption4Visible()}" for="4"><span th:text="${question.option4text}"></span></label><br>
+                        <input type="hidden" id="correctOption" class="form-control" th:field="*{questionToken}" autofocus="autofocus" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Պատասխանել</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+
+    <footer>
+        <div class="footer">
+            <p>© 2021 Բոլոր իրավունքները պաշտպանված են</p>
+        </div>
+    </footer>
+</div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/static/js/script.js"></script>
+</html>

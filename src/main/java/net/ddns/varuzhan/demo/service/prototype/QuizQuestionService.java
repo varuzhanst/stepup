@@ -10,4 +10,8 @@ import java.util.Set;
 public interface QuizQuestionService {
     void save(QuizQuestion quizQuestion);
     Set<QuizQuestion> getQuestionsByClassMaterial(ClassMaterial classMaterial);
+    QuizQuestion getQuizQuestionById(Integer id);
+    void deleteQuizQuestionByQuizQuestion(QuizQuestion quizQuestion);
+    QuizQuestion getRandomQuestion(ClassMaterial classMaterial);
+    QuizQuestion getQuestionByToken(String token);
 }

@@ -60,6 +60,7 @@
                 </div>
 
                 <div class="section_1_text" id="a">
+                    <h3 th:if="${waitingAssignments.size()+deadlinePassedAssignments.size()==0}">Հանձնարարություններ չկան</h3>
                     <p th:if="${deadlinePassedAssignments.size()>0}">Վերջնաժամկետը հատած հանձնարարություններ</p>
                     <div style="background-color: pink" class="task assignment"
                          th:each="assignment:${deadlinePassedAssignments}">
@@ -182,6 +183,7 @@
                     </div>
                 </div>
                 <div class="section_1_text" id="b">
+                    <h2 th:if="${userMaterials.size()==0}">ՈՒսումնական նյութեր չկան</h2>
                     <br>
                     <form th:action="@{'/user/dashboard'}" method="post" th:object="${subjectFilter}"
                           th:if="${userMaterials.size()>0}">
@@ -210,9 +212,13 @@
                         <p class="more" style="font-weight: bold"><a
                                 th:href="@{'/user/dashboard/classMaterials/'+${material.id}+'/downloadAttachedFile'}">Բեռնել</a>
                         </p>
+                        <p class="more" ><a
+                                th:href="@{'/user/dashboard/classMaterials/'+${material.id}+'/quiz'}">Ստուգել գիտելիքները</a>
+                        </p>
                     </div>
                 </div>
                 <div class="section_1_text" id="c">
+                    <h2 th:if="${examsStarted.size()+examsWaiting.size()+examsFailed.size()+examsFinished.size()==0}">Քննություններ չկան</h2>
                     <div class="task exam" th:each="exam:${examsStarted}">
                         <p>
                             Առարկա՝ <span th:text="${exam.examName}"></span><br>

@@ -107,9 +107,9 @@ public class Question {
         return Objects.hash(id);
     }
     public Boolean isOption3Visible(){
-        return option3==null;
+        return option3!=null;
     }
     public Boolean isOption4Visible(){
-        return option4==null;
+        return option4!=null;
     }
 }

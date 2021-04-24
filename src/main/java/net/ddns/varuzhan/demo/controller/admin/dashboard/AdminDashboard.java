@@ -5,6 +5,7 @@ import net.ddns.varuzhan.demo.dto.GroupsManagementDto;
 import net.ddns.varuzhan.demo.dto.NewGroupDto;
 import net.ddns.varuzhan.demo.dto.NewSubjectDto;
 import net.ddns.varuzhan.demo.model.GroupInfo;
+import net.ddns.varuzhan.demo.model.Role;
 import net.ddns.varuzhan.demo.model.User;
 import net.ddns.varuzhan.demo.service.prototype.GroupInfoService;
 import net.ddns.varuzhan.demo.service.prototype.SubjectInfoService;
@@ -45,6 +46,7 @@ public class AdminDashboard {
                 + " " + userService.getUserByEmail(authentication.getName()).getLastName();
         model.addAttribute("full_name", fullName);
         model.addAttribute("managers",userService.getAllManagers());
+        model.addAttribute("users",userService.getAllUsers());
         TreeSet<GroupsManagementDto> groupsManagementDtos = new TreeSet<>();
         HashSet<GroupInfo> allGroups = (HashSet<GroupInfo>) groupInfoService.getAllGroups();
         for(GroupInfo x: allGroups){
@@ -58,7 +60,7 @@ public class AdminDashboard {
     }
     @GetMapping({"groups/{groupId}/users/{userId}/changeAccountStatus",
             "groups/{groupId}/managers/{userId}/changeAccountStatus"})
-    public String changeAccountStatus(@PathVariable(required = false) String groupId, @PathVariable String userId){
+    public String changeAccountStatusFromGroup(@PathVariable(required = false) String groupId, @PathVariable String userId){
         User userById = userService.getUserById(userId);
         if(userById==null){
             return "redirect:/error";
@@ -66,7 +68,37 @@ public class AdminDashboard {
         else{
             userById.setLocked(!userById.getLocked());
             userService.save(userById);
+            if(userById.getRole()== Role.USER)
             return "redirect:/admin/dashboard/groups/"+groupId+"/users";
+            else  return "redirect:/admin/dashboard/groups/"+groupId+"/managers";
+        }
+
+    }
+    @GetMapping("users/{userId}/changeAccountStatus")
+    public String changeAccountStatusFromDashboard(@PathVariable String userId){
+        User userById = userService.getUserById(userId);
+        if(userById==null){
+            return "redirect:/error";
+        }
+        else{
+            userById.setLocked(!userById.getLocked());
+            userService.save(userById);
+            return "redirect:/admin/dashboard";
+        }
+
+    }
+    @GetMapping("users/{userId}/resetAccount")
+    public String resetAccount(@PathVariable String userId){
+        User userById = userService.getUserById(userId);
+        if(userById==null){
+            return "redirect:/error";
+        }
+        else{
+            userById.setLocked(false);
+            userById.setEnabled(false);
+            userById.setPassword(null);
+            userService.save(userById);
+            return "redirect:/admin/dashboard";
         }
 
     }

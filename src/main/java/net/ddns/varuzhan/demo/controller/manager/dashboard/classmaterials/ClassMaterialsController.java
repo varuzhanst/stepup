@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.TreeSet;
+import java.util.UUID;
 
 
 @Controller
@@ -128,6 +129,7 @@ public class ClassMaterialsController {
         if (materialById == null) return "redirect:/error";
         if (!user.equals(materialById.getManagersGroupsSubjects().getUser())) return "redirect:/error";
         QuizQuestion question = new QuizQuestion();
+        question.setQuestionToken(UUID.randomUUID().toString());
         question.setQuestionText(newQuestionDto.getQuestionText());
         question.setClassMaterial(materialById);
         question.setOption1text(newQuestionDto.getOption1());
@@ -198,5 +200,16 @@ public class ClassMaterialsController {
             return "redirect:/manager/dashboard/classMaterials/groups/" + materialById.getManagersGroupsSubjects().getGroupInfo().getId() + "/subjects/" + materialById.getManagersGroupsSubjects().getSubjectInfo().getId();
 
         } else return "redirect:/error";
+    }
+    @GetMapping("/manager/dashboard/classMaterials/{materialId}/questions/{questionsId}/remove")
+    public String removeQuestionFromClassMaterial(@PathVariable String materialId,@PathVariable String questionsId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User manager = userService.getUserByEmail(authentication.getName());
+        ClassMaterial materialById = classMaterialService.getMaterialById(materialId);
+        QuizQuestion quizQuestionById = quizQuestionService.getQuizQuestionById(Integer.parseInt(questionsId));
+       if(materialById==null|| quizQuestionById == null) return "redirect:/error";
+       if(!materialById.getManagersGroupsSubjects().getUser().equals(manager)||!quizQuestionById.getClassMaterial().equals(materialById)) return "redirect:/error";
+       quizQuestionService.deleteQuizQuestionByQuizQuestion(quizQuestionById);
+       return "redirect:/manager/dashboard/classMaterials/"+materialId+"/questions";
     }
 }

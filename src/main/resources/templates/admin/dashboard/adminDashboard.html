@@ -43,17 +43,17 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="section_1">
-                            <div class="func_btn button-1"><p>Խմբերի և առարկաներ</p></div>
+                            <div class="func_btn button-1"><p>Խմբեր և առարկաներ</p></div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="section_2">
-                            <div class="func_btn button-2"><p>Դասախոսների և ուսանողներ</p></div>
+                            <div class="func_btn button-2"><p>Դասախոսներ</p></div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="section_2">
-                            <div class="func_btn button-3"><p>Կառավարում</p></div>
+                            <div class="func_btn button-3"><p>Ուսանողներ</p></div>
                         </div>
                     </div>
                 </div>
@@ -184,6 +184,11 @@
                                 <span th:if="${manager.userStatus()==1}" style="color:OliveDrab;">Ակտիվ</span>
                                 <span th:if="${manager.userStatus()==0}" style="color:OrangeRed;">Նախնական</span>
                                 <span th:if="${manager.userStatus()==-1}" style="color:DarkRed;">Արգելափակված</span>
+                                <span><a th:href="@{'/admin/dashboard/users/'+${manager.id}+ '/changeAccountStatus'}"><i
+                                        class="fa fa-unlock-alt"></i></a></span>
+                                <span><a th:href="@{'/admin/dashboard/users/'+${manager.id}+ '/resetAccount'}">
+                                    <i class="fa fa-refresh"></i></a></span>
+
                             </td>
 
 
@@ -192,7 +197,46 @@
                     </table>
                 </div>
                 <div class="section_1_text" id="c">
+                    <br>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Անուն</th>
+                            <th scope="col">Ազգանուն</th>
+                            <th scope="col">Հայրանուն</th>
+                            <th scope="col">Էլ․ փոստ</th>
+                            <th scope="col">Հաշվի կարգավիճակ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user: ${users}">
+                            <td>
+                                <span th:text="${user.firstName}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${user.lastName}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${user.middleName}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${user.email}"></span>
+                            </td>
+                            <td>
+                                <span th:if="${user.userStatus()==1}" style="color:OliveDrab;">Ակտիվ</span>
+                                <span th:if="${user.userStatus()==0}" style="color:OrangeRed;">Նախնական</span>
+                                <span th:if="${user.userStatus()==-1}" style="color:DarkRed;">Արգելափակված</span>
+                                <span><a th:href="@{'/admin/dashboard/users/'+${user.id}+ '/changeAccountStatus'}"><i
+                                        class="fa fa-unlock-alt"></i></a></span>
+                                <span><a th:href="@{'/admin/dashboard/users/'+${user.id}+ '/resetAccount'}">
+                                    <i class="fa fa-refresh"></i></a></span>
 
+                            </td>
+
+
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
 
 
