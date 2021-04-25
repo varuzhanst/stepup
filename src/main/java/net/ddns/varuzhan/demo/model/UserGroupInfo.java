@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class UserGroupInfo {
+public class UserGroupInfo implements Comparable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -56,5 +56,10 @@ public class UserGroupInfo {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return this.groupInfo.compareTo(((UserGroupInfo)o).getGroupInfo());
     }
 }

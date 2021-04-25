@@ -4,9 +4,11 @@ package net.ddns.varuzhan.demo.controller.admin.dashboard;
 import net.ddns.varuzhan.demo.dto.GroupsManagementDto;
 import net.ddns.varuzhan.demo.dto.NewGroupDto;
 import net.ddns.varuzhan.demo.dto.NewSubjectDto;
+import net.ddns.varuzhan.demo.dto.UsersShowDto;
 import net.ddns.varuzhan.demo.model.GroupInfo;
 import net.ddns.varuzhan.demo.model.Role;
 import net.ddns.varuzhan.demo.model.User;
+import net.ddns.varuzhan.demo.model.UserGroupInfo;
 import net.ddns.varuzhan.demo.service.prototype.GroupInfoService;
 import net.ddns.varuzhan.demo.service.prototype.SubjectInfoService;
 import net.ddns.varuzhan.demo.service.prototype.UserGroupInfoService;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 
@@ -45,8 +48,30 @@ public class AdminDashboard {
                 + " " + userService.getUserByEmail(authentication.getName()).getMiddleName()
                 + " " + userService.getUserByEmail(authentication.getName()).getLastName();
         model.addAttribute("full_name", fullName);
-        model.addAttribute("managers",userService.getAllManagers());
-        model.addAttribute("users",userService.getAllUsers());
+        Set<User> users = userService.getAllUsers();
+        Set<User> managers = userService.getAllManagers();
+        TreeSet<UsersShowDto> usersShowDtos = new TreeSet<>();
+        TreeSet<UsersShowDto> managersShowDtos = new TreeSet<>();
+        for(User x:users){
+            String group="-";
+            if(userGroupInfoService.getGroupInfoByUser(x)!=null)
+                group = userGroupInfoService.getGroupInfoByUser(x).getGroupInfo().getGroupNumber();
+            usersShowDtos.add(new UsersShowDto(x,group));
+        }
+        StringBuilder groups= new StringBuilder("-");
+        for(User x:managers){
+            if(!userGroupInfoService.getGroupInfosByUser(x).isEmpty()){
+                TreeSet<UserGroupInfo> userGroupInfos = new TreeSet<>(userGroupInfoService.getGroupInfosByUser(x));
+                groups = new StringBuilder();
+                for(UserGroupInfo y:userGroupInfos){
+                    groups.append(y.getGroupInfo().getGroupNumber()).append("\n");
+                }
+            }
+            managersShowDtos.add(new UsersShowDto(x, groups.toString()));
+
+        }
+        model.addAttribute("managers",managersShowDtos);
+        model.addAttribute("users",usersShowDtos);
         TreeSet<GroupsManagementDto> groupsManagementDtos = new TreeSet<>();
         HashSet<GroupInfo> allGroups = (HashSet<GroupInfo>) groupInfoService.getAllGroups();
         for(GroupInfo x: allGroups){

@@ -17,6 +17,8 @@ public interface UserGroupInfoService {
 
     Set<User> getManagersByGroupInfo(GroupInfo groupInfo);
 
+    Set<UserGroupInfo> getGroupInfosByUser(User user);
+
     Set<User> getUsersWithNoGroup();
 
     UserGroupInfo getUserGroupInfoByGroupInfoAndUser(GroupInfo groupInfo, User user);

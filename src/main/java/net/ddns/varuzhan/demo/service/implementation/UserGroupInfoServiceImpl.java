@@ -59,6 +59,11 @@ public class UserGroupInfoServiceImpl implements UserGroupInfoService {
     }
 
     @Override
+    public Set<UserGroupInfo> getGroupInfosByUser(User user) {
+        return userGroupInfoRepository.findUserGroupInfosByUser(user);
+    }
+
+    @Override
     public Set<User> getUsersWithNoGroup() {
         Set<User> usersWithNoGroups = userService.getAllUsers();
         List<UserGroupInfo> usersWithGroup = userGroupInfoRepository.findAll();
