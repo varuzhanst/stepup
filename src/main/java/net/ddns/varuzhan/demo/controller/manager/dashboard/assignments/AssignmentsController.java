@@ -267,7 +267,7 @@ public class AssignmentsController {
         User user = userService.getUserByEmail(authentication.getName());
         AssignmentReturned assignmentReturnedById = assignmentReturnedService.getAssignmentReturnedById(turnedInAssignmentId);
         if (assignmentReturnedById != null) {
-            if (assignmentReturnedById.getAssignment().getManagersGroupsSubjects().getUser().equals(userGroupInfoService.getGroupInfoByUser(user).getUser())) {
+            if (assignmentReturnedById.getAssignment().getManagersGroupsSubjects().getUser().equals(user)) {
                 try {
                     Integer actualGrade = Integer.parseInt(assignmentReturnDto.getGrade());
                     if (actualGrade > assignmentReturnedById.getAssignment().getMaxGrade() || actualGrade < 0) throw new Exception("Wrong grade");
