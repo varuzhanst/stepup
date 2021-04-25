@@ -60,7 +60,7 @@
                     <br>
                     <br>
                     <h4>Հասանելի առարկաներ</h4>
-                    <table class="table">
+                    <table class="table" style="width: auto">
                         <thead>
                         <tr>
                             <th scope="col">Առարկա</th>
@@ -75,7 +75,7 @@
                         <tr th:each="availSubject:${subjects}">
 
                             <td>
-                                    <span th:text="${availSubject.subjectName}">
+                                    <span th:text="${availSubject.subjectName}" >
 
                                     </span>
                             </td>

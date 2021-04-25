@@ -71,7 +71,7 @@
                     </div>
                     <br>
                     <br>
-                    <table class="table">
+                    <table class="table" style="width: auto">
                         <thead>
                         <tr>
                             <th scope="col">Խումբ</th>
@@ -80,7 +80,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="group:${groups}">
+                        <tr th:each="group:${groups}" style="text-align: center">
                             <td>
                                 <span th:text="${group.getGroupInfo().groupNumber}"></span>
 
@@ -117,16 +117,18 @@
                     <form method="post" th:action="@{/admin/dashboard/groups/new}" th:object="${newGroup}">
                         <div class="form-group">
                             <label class="control-label" for="group">Խումբ </label> <input
+                                style="width: 150px;"
                                 autofocus="autofocus" class="form-control" id="group" required
                                 th:field="*{groupNumber}"/>
                         </div>
+                        <br>
                         <div class="form-group">
                             <button class="btn btn-success" type="submit">Ավելացնել</button>
                         </div>
                     </form>
                     <br>
                     <br>
-                    <table class="table">
+                    <table class="table" style="width: auto">
                         <thead>
                         <tr>
                             <th scope="col">Առարկա</th>
@@ -153,9 +155,11 @@
                     <form method="post" th:action="@{/admin/dashboard/subjects/new}" th:object="${newSubject}">
                         <div class="form-group">
                             <label class="control-label" for="subject">Առարկա </label> <input
+                                style="width: 150px;"
                                 autofocus="autofocus" class="form-control" id="subject" required
                                 th:field="*{subjectName}"/>
                         </div>
+                        <br>
                         <div class="form-group">
                             <button class="btn btn-success" type="submit">Ավելացնել</button>
                         </div>

@@ -138,6 +138,14 @@ main{
 .more{
     text-align: right;
 }
+
+.form-group-1{
+    text-align: right;
+    margin-right: 15px;
+}
+.form-group-2{
+    margin-left: 15px;
+}
 .footer{
     margin-top: 40%;
     width: 100%;
@@ -145,4 +153,8 @@ main{
     background-color: #222121;
     color: #f7f7f7;
     text-align: center;
+}
+
+.table{
+    width:100px
 }
