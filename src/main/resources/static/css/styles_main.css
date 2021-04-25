@@ -116,7 +116,7 @@ main{
     margin-top: 50px;
     border:solid 1.5px #00cc66;
     width: 650px;
-    height: 200px;
+    height: auto;
     background-color: #ebffe2;
     border-radius: 10px;
     color: #222121;
@@ -130,6 +130,7 @@ main{
     text-decoration: none;
     color: #222121;
 }
+
 
 .task a:hover{
     color: #222121;

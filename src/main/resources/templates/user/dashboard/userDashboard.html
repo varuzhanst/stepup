@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../static/css/styles_main.css">
     <link rel="stylesheet" href="../static/library/bootstrap.min.css">
     <link rel="stylesheet" href="../static/library/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div class="all_project">
@@ -205,10 +206,10 @@
                                             style="font-weight: bold"></span><br>
                         </p>
                         <p class="more" style="font-weight: bold"><a
-                                th:href="@{'/user/dashboard/classMaterials/'+${material.id}+'/downloadAttachedFile'}">Բեռնել</a>
-                        </p>
-                        <p class="more" ><a
-                                th:href="@{'/user/dashboard/classMaterials/'+${material.id}+'/quiz'}">Ստուգել գիտելիքները</a>
+                                th:href="@{'/user/dashboard/classMaterials/'+${material.id}+'/downloadAttachedFile'}"><i class="fa fa-file-pdf-o" ></i> Բեռնել</a>
+                            <br><br>
+                       <a
+                                th:href="@{'/user/dashboard/classMaterials/'+${material.id}+'/quiz'}"><i class="fa fa-line-chart"></i> Ստուգել գիտելիքները</a>
                         </p>
                     </div>
                 </div>
